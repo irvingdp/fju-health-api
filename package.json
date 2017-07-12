@@ -21,10 +21,10 @@
     "yargs": "^4.7.1"
   },
   "devDependencies": {
-    "jest": "^19.0.0"
+    "jest": "^19.0.0",
+    "nodemon": "^1.11.0"
   },
   "jest": {
-    "testPathIgnorePatterns": [
-    ]
+    "testPathIgnorePatterns": []
   }
 }

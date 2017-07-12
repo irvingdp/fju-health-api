@@ -8,14 +8,22 @@ var swaggerJSDoc = require('swagger-jsdoc');
 
 app.use(bodyParser.json()); // for parsing application/json
 
+// allow CORS
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+    next();
+});
+
 var options = {
     swaggerDefinition: {
         info: {                    // This is the same info property in the Swagger 2.0 spec.
             title: 'FJU Health API',
-            version: '1.0.0'
+            version: '0.0.1'
         },
         schemes: ["http", "https"],
-        host: config.HOST_NAME,
+        host: config.HOST_NAME
     },
     apis: ['./index.js', './routers/*'], // Path to the API docs
 };
@@ -29,7 +37,7 @@ app.get('/api', function (req, res) {
 app.use('/hello/', require("./routers/hello"));
 
 app.use(function (err, req, res, next) { // do not remove next as the method signature matters...
-    let error = helper.errorHandle(err);
+    var error = helper.errorHandle(err);
     res.status(error.status).json({message: error.message, stack: error.stack});
 });
 

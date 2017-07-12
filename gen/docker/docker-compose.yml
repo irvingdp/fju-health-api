@@ -1,0 +1,29 @@
+### WARNING: This file is generated from template, edit the file under build-resources/template ###
+
+version: '2'
+
+services:
+  api-server:
+    restart: always
+    image: fju-health-api
+    container_name: fju-health-api-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - ../../:/usr/src/app
+
+
+  api-doc:
+    restart: always
+    image: swaggerapi/swagger-ui
+    container_name: fju-health-api-doc
+    environment:
+      - API_URL=http://localhost:3001/api/
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../../:/usr/src/app
+

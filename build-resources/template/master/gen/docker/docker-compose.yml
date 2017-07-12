@@ -1,0 +1,29 @@
+<%= constant.warning %>
+
+version: '2'
+
+services:
+  api-server:
+    restart: always
+    image: fju-health-api
+    container_name: fju-health-api-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - ../../:/usr/src/app
+
+
+  api-doc:
+    restart: always
+    image: swaggerapi/swagger-ui
+    container_name: fju-health-api-doc
+    environment:
+      - API_URL=<%= apiDocUrl %>
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../../:/usr/src/app
+
