@@ -1,11 +1,8 @@
 const gulp = require('gulp-help')(require('gulp'));
 const runSequence = require('run-sequence');
-const format = require('string-format');
 const argv = require('yargs').argv;
 const template = require('gulp-template');
 const exec = require('gulp-exec');
-
-format.extend(String.prototype, {});
 
 /**
  *Basic parameters
@@ -17,7 +14,7 @@ gulp.task("setup", "setup for given environment, options: -e (environment)", fun
 });
 
 gulp.task("compile-template", "Compile files under templates/master with given environment, options: -e (environment)", function (cb) {
-    let environmentStringValues = require('./build-resources/template/env/{}/string.js'.format(ENVIRONMENT));
+    let environmentStringValues = require(`./build-resources/template/env/${ENVIRONMENT}/string.js`);
     let constantStringValues = require('./build-resources/template/env/constant.js');
 
     gulp.src('build-resources/template/master/**/*', {base: 'build-resources/template/master/'})
