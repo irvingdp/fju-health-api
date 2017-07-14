@@ -1,7 +1,0 @@
-### WARNING: This file is generated from template, edit the file under build-resources/template ###
-
-FROM mariadb:10.1
-
-LABEL name=fju-health-db
-LABEL group=fju-health
-LABEL version=0.0.1
