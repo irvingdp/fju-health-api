@@ -36,6 +36,8 @@ app.get('/api', function (req, res) {
 
 app.use('/hello/', require("./routers/hello"));
 
+app.use('/user/', require("./routers/user"));
+
 app.use(function (err, req, res, next) { // do not remove next as the method signature matters...
     var error = helper.errorHandle(err);
     res.status(error.status).json({message: error.message, stack: error.stack});
