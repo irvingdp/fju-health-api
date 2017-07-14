@@ -20,7 +20,7 @@ const attachProcessToOutput = function(process) {
 };
 
 gulp.task("setup", "setup for given environment, options: -e (environment)", function (cb) {
-    runSequence('compile-template', cb);
+    runSequence('compile-template', 'build-container', 'update-db', cb);
 });
 
 gulp.task("compile-template", "Compile files under templates/master with given environment, options: -e (environment)", function (cb) {
