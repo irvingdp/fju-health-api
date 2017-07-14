@@ -5,6 +5,11 @@ SETUP Dependencies
 - Install docker engine
 - Install docker-compose
 - Install nodejs,npm,gulp
+- Install the following global package npm:
+```
+npm i -g gulp-cli
+npm i -g knex
+```
 
 Build Project
 -
