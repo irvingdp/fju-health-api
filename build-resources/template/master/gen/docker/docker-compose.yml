@@ -35,7 +35,6 @@ services:
       context: .
       dockerfile: Dockerfile-db
     environment:
-      #TODO: (Erwin) Find someway to set a secure password for release version?
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=<%= db.database %>
     ports:

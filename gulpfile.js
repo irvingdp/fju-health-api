@@ -39,7 +39,7 @@ gulp.task("compile-template", "Compile files under templates/master with given e
 
 gulp.task("build-container", "Build containers from generated docker-compose.yml file", function (cb) {
     docker
-        .compose({composeFile: "./gen/docker/docker-compose.yml"})
+        .compose({composeFile: "./gen/docker/docker-compose.yml", projectName: 'FJU-HEALTH'})
         .then(cb)
         .catch((error) => {
             console.error(error);
