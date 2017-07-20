@@ -48,11 +48,11 @@ gulp.task("build-container", "Build containers from generated docker-compose.yml
 });
 
 gulp.task("update-db", "Update db schema using generated knex file", function(cb) {
-    let process = exec(`knex migrate:latest --knexfile ./gen/knex/knexfile.js`, cb);
+    let process = exec(`npm run update-db`, cb);
     attachProcessToOutput(process);
 });
 
 gulp.task("rollback-db", "Rollback last db migration using generated knex file", function(cb) {
-    let process = exec(`knex migrate:rollback --knexfile ./gen/knex/knexfile.js`, cb);
+    let process = exec(`npm run rollback-db`, cb);
     attachProcessToOutput(process);
 });

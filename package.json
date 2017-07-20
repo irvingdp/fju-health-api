@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "update-db": "$(npm bin)/knex migrate:latest --knexfile ./gen/knex/knexfile.js",
+    "rollback-db": "$(npm bin)/knex migrate:rollback --knexfile ./gen/knex/knexfile.js"
   },
   "author": "",
   "license": "ISC",
