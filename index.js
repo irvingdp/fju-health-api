@@ -2,11 +2,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const config = require("./config");
-const helper = require("./utils/helper");
+const Auth = require("./utils/auth");
 const app = express();
-var swaggerJSDoc = require('swagger-jsdoc');
-
-app.use(bodyParser.json()); // for parsing application/json
+const swaggerJSDoc = require('swagger-jsdoc');
+const authentication = require('express-authentication');
+// for parsing application/json
+app.use(bodyParser.json());
 
 // allow CORS
 app.use(function (req, res, next) {
@@ -16,37 +17,47 @@ app.use(function (req, res, next) {
     next();
 });
 
-var options = {
-    swaggerDefinition: {
-        info: {                    // This is the same info property in the Swagger 2.0 spec.
-            title: 'FJU Health API',
-            version: '0.0.1'
-        },
-        schemes: ["http", "https"],
-        host: config.HOST_NAME
-    },
-    apis: ['./index.js', './routers/*'], // Path to the API docs
-};
-// Initialize swagger-jsdoc -> returns validated swagger spec in json format
-var swaggerSpec = swaggerJSDoc(options);
-app.get('/api', function (req, res) {
-    res.setHeader('Content-Type', 'application/json');
-    res.send(swaggerSpec);
+// authenticate requests via header then inject current user to req.authentication
+// this middleware gets called on every request
+app.use(function (req, res, next) {
+    let authentication = Auth.auth(req);
+    if(authentication) {
+        req.authenticated = true;
+        req.authentication = authentication;
+    } else {
+        req.authenticated = false;
+    }
+    next();
 });
 
-app.use('/hello/', require("./routers/hello"));
-
-app.use('/user/', require("./routers/user"));
-
-app.use(function (err, req, res, next) { // do not remove next as the method signature matters...
-    var error = helper.errorHandle(err);
-    res.status(error.status).json({message: error.message, stack: error.stack});
+app.get('/user/profile', authentication.required(), (req, res, next) => {
+    res.status(200).json({auth: req.authentication})
 });
 
-var port = process.argv[2] || 3001;
+app.use('/', require("./routers/unauth"));
 
-app.listen(port, function () {
-    console.log('FJU Health API listening on port ' + port);
+app.use(function (err, req, res, next) {  // do not remove next as the method signature matters...
+    let status, error = {};
+
+    if(err.status === 401) {
+        status = 401;
+        error = {
+            message: "access denied"
+        }
+    } else if (!err.status){
+        status = 500;
+        error = {
+            message: err.message,
+            stack: err.stack,
+        }
+    } else {
+        status = err.status;
+        error = {
+            message: err.message,
+            stack: err.stack,
+        }
+    }
+    res.status(status).json(error);
 });
 
 /**
@@ -72,3 +83,30 @@ app.listen(port, function () {
  *       stack:
  *         type: string
  */
+//start: Initialize swagger-jsdoc -> returns validated swagger spec in json format
+var options = {
+    swaggerDefinition: {
+        info: {                    // This is the same info property in the Swagger 2.0 spec.
+            title: 'FJU Health API',
+            version: '0.0.1'
+        },
+        schemes: ["http", "https"],
+        host: config.HOST_NAME
+    },
+    apis: ['./index.js', './routers/*'], // Path to the API docs
+};
+var swaggerSpec = swaggerJSDoc(options);
+app.get('/api', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swaggerSpec);
+});
+//end: Initialize swagger
+
+
+var port = process.argv[2] || 3002;
+
+app.listen(port, function () {
+    console.log('FJU Health API listening on port ' + port);
+});
+
+

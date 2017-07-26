@@ -10,5 +10,6 @@ module.exports = {
             user: '<%= db.user %>',
             db: '<%= db.database %>',
         },
+        debug: '<%= db.debug %>',
     },
 };

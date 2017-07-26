@@ -2,19 +2,20 @@ const Model = require('objection').Model;
 
 class User extends Model {
     static get tableName() {
-        return 'users';
+        return 'User';
     }
 
     static get jsonSchema() {
         return {
             type: 'object',
-            required: ['name'],
 
             properties: {
                 id: {type: 'integer'},
-                name: {type: 'string'},
+                email: {type: 'string'},
                 salt: {type: 'string'},
                 passwordHash: {type: 'string'},
+                createdAt: {type: 'dateTime'},
+                updatedAt: {type: 'dateTime'},
             }
         };
     }
