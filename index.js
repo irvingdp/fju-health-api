@@ -6,24 +6,17 @@ const Auth = require("./utils/auth");
 const app = express();
 const swaggerJSDoc = require('swagger-jsdoc');
 const authentication = require('express-authentication');
-// for parsing application/json
-app.use(bodyParser.json());
 
-// allow CORS
-app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-    res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
-    next();
-});
+app.use(bodyParser.json()); //for parsing application/json
 
-// authenticate requests via header then inject current user to req.authentication
-// this middleware gets called on every request
+app.use('/', require("./routers/public")); //none auth path
+
+// auth middleware , it's gets called on below routes
 app.use(function (req, res, next) {
     let authentication = Auth.auth(req);
     if(authentication) {
         req.authenticated = true;
-        req.authentication = authentication;
+        req.authentication = authentication; //user identify: email
     } else {
         req.authenticated = false;
     }
@@ -31,15 +24,14 @@ app.use(function (req, res, next) {
 });
 
 app.get('/user/profile', authentication.required(), (req, res, next) => {
-    res.status(200).json({auth: req.authentication})
+    res.status(200).json({authentication: req.authentication})
 });
 
-app.use('/', require("./routers/unauth"));
-
+//error handler middleware
 app.use(function (err, req, res, next) {  // do not remove next as the method signature matters...
     let status, error = {};
 
-    if(err.status === 401) {
+    if(err.status === 401 && !err.message) {
         status = 401;
         error = {
             message: "access denied"

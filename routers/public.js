@@ -19,7 +19,6 @@ router.post('/register', async (req, res, next) => {
         } else {
             let registeredUser = await DomainUser.registerNewUser(req.body);
             res.json({
-                user: registeredUser,
                 token: Auth.genToken(registeredUser.email)
             });
         }
@@ -29,11 +28,10 @@ router.post('/register', async (req, res, next) => {
 });
 router.post('/login', async (req, res, next) => {
     try {
-        let existingUser = await DomainUser.loginWithEmailAndPassword(req.body);
-        if(existingUser) {
+        let isLogging = await DomainUser.canLoginWithEmailAndPassword(req.body);
+        if(isLogging) {
             res.json({
-                user: existingUser,
-                token: Auth.genToken(existingUser.email)
+                token: Auth.genToken(req.body.email)
             });
         } else {
             throw new UserLoginFailedError()

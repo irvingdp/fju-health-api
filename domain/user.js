@@ -23,11 +23,11 @@ class DomainUser {
         });
     }
 
-    static async loginWithEmailAndPassword({email, password}) {
+    static async canLoginWithEmailAndPassword({email, password}) {
         return await objection.transaction(UserModel.knex(), async (trx) => {
             let existingUser = await UserModel.query(trx).where({email}).first();
             if (existingUser && PasswordUtils.isPasswordCorrect(password, existingUser.passwordHash)) {
-                return await existingUser.$query().select('email');
+                return true;
             } else {
                 return false;
             }
