@@ -37,12 +37,6 @@ app.use(function (err, req, res, next) {  // do not remove next as the method si
         error = {
             message: "access denied"
         }
-    } else if (err.status === 499) {
-        status = 499;
-        error = {
-            message: "refresh token",
-            token: err.newToken,
-        }
     } else if (!err.status) {
         status = 500;
         error = {

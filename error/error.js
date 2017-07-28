@@ -21,17 +21,9 @@ class PermissionDeniedError extends Error {
     }
 }
 
-class TokenExpiredError extends Error {
-    constructor(message="Token Expire.", newToken) {
-        super(message);
-        this.name = this.constructor.name;
-        this.status = 499;
-        this.newToken = newToken;
-    }
-}
+
 module.exports = {
     UserAlreadyRegisteredError,
     UserLoginFailedError,
     PermissionDeniedError,
-    TokenExpiredError,
 };
