@@ -13,7 +13,7 @@ app.use('/', require("./routers/public")); //none auth path
 
 // auth middleware , it's gets called on below routes
 app.use(function (req, res, next) {
-    let authentication = Auth.auth(req);
+    let authentication = Auth.auth(req.headers.authorization);
     if(authentication) {
         req.authenticated = true;
         req.authentication = authentication; //user identify: email

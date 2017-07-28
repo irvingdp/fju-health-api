@@ -21,7 +21,7 @@ exports.up = function (knex, Promise) {
             t.enu('gender', ['male', 'female']);
             t.string('contactAddress');
             t.string('fax');
-            t.string('mobilePhone');
+            t.string('phoneNumber');
             t.timestamp('createdAt');
             t.timestamp('updatedAt');
             t.integer('user_id_fk').unsigned().references('id').inTable('User');

@@ -21,7 +21,7 @@ class Profile extends Model {
                 },
                 contactAddress: {type: 'string'},
                 fax: {type: 'string'},
-                mobilePhone: {type: 'string'},
+                phoneNumber: {type: 'string'},
                 createdAt: {type: 'dateTime'},
                 updatedAt: {type: 'dateTime'},
                 user_id_fk: {type: 'references'},

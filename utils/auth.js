@@ -2,8 +2,7 @@ const jwt = require('jsonwebtoken')
 const config = require('../config')
 
 class Auth {
-    static auth(req) {
-        let token = req.headers.authorization;
+    static auth(token) {
         try {
             let decoded = jwt.verify(token, config.TOKEN_SECRET);
             return decoded.data
