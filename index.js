@@ -11,7 +11,7 @@ app.use(bodyParser.json()); //for parsing application/json
 
 app.use('/', require("./routers/public")); //none auth path
 
-// auth middleware , it's gets called on below routes
+// add auth middleware for auth request exclude "./routers/public"
 app.use(function (req, res, next) {
     let authentication = Auth.auth(req.headers.authorization);
     if(authentication) {
@@ -23,8 +23,9 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.get('/user/profile', authentication.required(), (req, res, next) => {
-    res.status(200).json({authentication: req.authentication})
+//just for check token is valid or not.
+app.post('/isValidToken', authentication.required(), (req, res) => {
+    res.status(200).json({});
 });
 
 //error handler middleware
@@ -36,7 +37,13 @@ app.use(function (err, req, res, next) {  // do not remove next as the method si
         error = {
             message: "access denied"
         }
-    } else if (!err.status){
+    } else if (err.status === 499) {
+        status = 499;
+        error = {
+            message: "refresh token",
+            token: err.newToken,
+        }
+    } else if (!err.status) {
         status = 500;
         error = {
             message: err.message,

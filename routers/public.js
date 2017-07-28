@@ -11,22 +11,6 @@ Model.knex(knex);
 
 let router = express.Router();
 
-router.post('/isValidToken', async (req, res, next) => {
-    try {
-        let authentication = Auth.auth(req.body.token);
-        if(authentication) {
-            req.authenticated = true;
-            req.authentication = authentication; //user identify: email
-            res.json({valid: true});
-        } else {
-            req.authenticated = false;
-            res.json({valid: false});
-        }
-    } catch (error) {
-        next(error);
-    }
-});
-
 router.post('/register', async (req, res, next) => {
     try {
         let isUserAlreadyRegistered = await DomainUser.isUserAlreadyRegistered(req.body);
