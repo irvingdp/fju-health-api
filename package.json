@@ -21,6 +21,7 @@
     "jsonwebtoken": "^7.4.1",
     "knex": "^0.13.0",
     "mariasql": "^0.2.6",
+    "moment": "^2.18.1",
     "objection": "^0.8.4",
     "run-sequence": "^1.1.5",
     "swagger-jsdoc": "^1.9.6",
