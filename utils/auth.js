@@ -1,47 +1,30 @@
-const jwt = require('jsonwebtoken')
-const config = require('../config')
-const session = require('./session')
+const JWT = require('jsonwebtoken')
+const Config = require('../config')
+const Token = require('./token')
 
-class Auth {
-    static auth(token) {
-        if(session.isExpired(token)) {
-            if(_isTokenExpired(token)) {
-               session.remove(token);
-               return null;
-            } else {
-                session.update(token);
-                return _decode(token);
-            }
+const Auth = {
+    auth: (token) => {
+        if(Token.isExpired(token)) {
+            Token.remove(token);
+            return null;
         } else {
-            return _decode(token, true); //if session not expired , don't consider the token expire or not.
+            Token.update(token);
+            return _decode(token);
         }
-
-    }
-    static genToken(email) {
-        let token = jwt.sign(
+    },
+    genToken: (email) => {
+        let token = JWT.sign(
             {data: {email: email}},
-            config.TOKEN_SECRET,
-            {expiresIn: config.TOKEN_EXPIRES_IN_SEC}
+            Config.TOKEN_SECRET,
         );
-        session.add(token);
+        Token.add(token);
         return token;
-    }
-}
-const _isTokenExpired = (token) => {
-    try {
-        jwt.verify(token, config.TOKEN_SECRET);
-        return false;
-    } catch (err) {
-        if (err.constructor.name === "TokenExpiredError") {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    },
 };
-const _decode = (token, ignoreExpiration = false) => {
+
+const _decode = (token) => {
     try {
-        let decoded = jwt.verify(token, config.TOKEN_SECRET, {ignoreExpiration});
+        let decoded = JWT.verify(token, Config.TOKEN_SECRET);
         return decoded.data;
     } catch (err) {
         return null;
