@@ -12,15 +12,13 @@ class Profile extends Model {
 
             properties: {
                 id: {type: 'integer'},
-                uid: {type: 'string'},
-                birthday: {type: 'dateTime'},
                 name: {type: 'string'},
+                birthday: {type: 'dateTime'},
                 gender: {
                     type: 'string',
                     enum: ['male', 'female'],
                 },
                 contactAddress: {type: 'string'},
-                fax: {type: 'string'},
                 phoneNumber: {type: 'string'},
                 createdAt: {type: 'dateTime'},
                 updatedAt: {type: 'dateTime'},

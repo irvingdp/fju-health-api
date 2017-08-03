@@ -1,4 +1,5 @@
 const Model = require('objection').Model;
+const timestampUpdateWrapper = require('./wrappers/timestampUpdateWrapper');
 
 class User extends Model {
     static get tableName() {
@@ -11,8 +12,8 @@ class User extends Model {
 
             properties: {
                 id: {type: 'integer'},
+                uid: {type: 'string'},
                 email: {type: 'string'},
-                salt: {type: 'string'},
                 passwordHash: {type: 'string'},
                 createdAt: {type: 'dateTime'},
                 updatedAt: {type: 'dateTime'},
@@ -21,4 +22,4 @@ class User extends Model {
     }
 }
 
-module.exports = User;
+module.exports = timestampUpdateWrapper(User);
