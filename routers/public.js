@@ -9,15 +9,17 @@ const knexConfig = require('../gen/knex/knexfile');
 let knex = Knex(knexConfig.development);
 Model.knex(knex);
 
+
 let router = express.Router();
+let domainUser = new DomainUser();
 
 router.post('/register', async (req, res, next) => {
     try {
-        let isUserAlreadyRegistered = await DomainUser.isUserAlreadyRegistered(req.body);
+        let isUserAlreadyRegistered = await domainUser.isUserAlreadyRegistered(req.body);
         if (isUserAlreadyRegistered) {
             throw new UserAlreadyRegisteredError();
         } else {
-            let registeredUser = await DomainUser.registerNewUser(req.body);
+            let registeredUser = await domainUser.registerNewUser(req.body);
             res.json({
                 token: Auth.genToken(registeredUser.email)
             });
@@ -28,7 +30,7 @@ router.post('/register', async (req, res, next) => {
 });
 router.post('/login', async (req, res, next) => {
     try {
-        let isLogging = await DomainUser.canLoginWithEmailAndPassword(req.body);
+        let isLogging = await domainUser.canLoginWithEmailAndPassword(req.body);
         if(isLogging) {
             res.json({
                 token: Auth.genToken(req.body.email)
