@@ -20,7 +20,7 @@ class Package extends Model {
                     type: 'string',
                     enum: ['male', 'female'],
                 },
-                groupOrder: {type: 'integer'},
+                group: {type: 'integer'},
                 order: {type: 'integer'},
                 createdAt: {type: 'dateTime'},
                 updatedAt: {type: 'dateTime'},

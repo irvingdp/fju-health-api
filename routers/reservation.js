@@ -2,6 +2,7 @@ const express = require('express');
 const DomainUser = require('../domain/user');
 const DomainReservation = require('../domain/reservation');
 const DomainPackage = require('../domain/package');
+const DomainProfile = require('../domain/profile');
 
 const Model = require('objection').Model;
 const Knex = require('knex');
@@ -13,21 +14,40 @@ let router = express.Router();
 let domainUser = new DomainUser();
 let domainReservation = new DomainReservation();
 let domainPackage = new DomainPackage();
+let domainProfile = new DomainProfile();
 
 router.post('/', async (req, res, next) => {
     try {
         let currentUser = await domainUser.getUser({email: req.authentication.email});
         let packageModal = await domainPackage.getPackage({id: req.body.packageId});
+
+        let currentProfile = await domainProfile.getProfile(currentUser);
+
+        let profileData = {
+            name: req.body.name,
+            birthday: req.body.birthday,
+            phoneNumber: req.body.phoneNumber,
+            contactAddress: req.body.contactAddress,
+            gender: packageModal.gender
+        };
+
+        if(currentProfile) {
+            profileData.profileModal = currentProfile;
+            await domainProfile.updateProfile(profileData)
+        } else {
+            profileData.userModal = currentUser;
+            await domainProfile.createProfile(profileData)
+        }
         await domainReservation.createReservation({
             userModal: currentUser,
             packageModal: packageModal,
             reserveDate: req.body.reserveDate,
-            status: req.body.status,
-            paymentDate: req.body.paymentDate,
-            isSentPackage: req.body.isSentPackage,
-            sentPackageDate: req.body.sentPackageDate,
-            isAgentCalled: req.body.isAgentCalled,
-            agentCalledDate: req.body.agentCalledDate,
+            status: "paymentPending",
+            paymentDate: null,
+            isSentPackage: false,
+            sentPackageDate: null,
+            isAgentCalled: false,
+            agentCalledDate: null,
         });
         res.status(200).json({});
     } catch (error) {

@@ -5,7 +5,7 @@ class DomainPackage {
         return await PackageModel.query().where({id}).first();
     }
     async listPackages() {
-        return await PackageModel.query().orderBy('groupOrder').orderBy('order');
+        return await PackageModel.query().orderBy('group').orderBy('order');
     }
 }
 
