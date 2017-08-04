@@ -10,12 +10,13 @@ class DomainUser {
         return !!result;
     }
 
-    async registerNewUser({email, password}) {
+    async registerNewUser({email, password, uid}) {
         return await objection.transaction(UserModel.knex(), async (trx) => {
             return await UserModel.query(trx)
                 .insert({
                     email,
                     passwordHash: PasswordUtils.hashPassword(password),
+                    uid,
                 })
                 .pick(['email']);
         });
