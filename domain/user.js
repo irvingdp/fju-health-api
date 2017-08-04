@@ -30,7 +30,9 @@ class DomainUser {
         }
     }
 
-
+    async getUser({email}) {
+        return await UserModel.query().where({email}).first();
+    }
 }
 
 module.exports = DomainUser;

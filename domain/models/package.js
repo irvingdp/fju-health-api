@@ -1,4 +1,5 @@
 const Model = require('objection').Model;
+const timestampUpdateWrapper = require('./wrappers/timestampUpdateWrapper');
 
 class Package extends Model {
     static get tableName() {

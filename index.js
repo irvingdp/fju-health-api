@@ -28,6 +28,10 @@ app.post('/isValidToken', authentication.required(), (req, res) => {
     res.status(200).json({});
 });
 
+app.use('/profile', authentication.required(), require("./routers/profile"));
+
+app.use('/reservation', authentication.required(), require("./routers/reservation"));
+
 //error handler middleware
 app.use(function (err, req, res, next) {  // do not remove next as the method signature matters...
     let status, error = {};
