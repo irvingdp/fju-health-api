@@ -8,8 +8,10 @@ const variables = {
     db: {
         database: "fjuhealth",
         host: "127.0.0.1",
-        user: "root",
-        debug: true,
+        port: 5432,
+        user: "admin",
+        password: "admin",
+        debug: true
     },
 };
 

@@ -4,11 +4,15 @@
 
 module.exports = {
     development: {
-        client: 'mariadb',
+        client: 'pg',
         connection: {
             host: '<%= db.host %>',
             user: '<%= db.user %>',
-            db: '<%= db.database %>',
+            password: '<%= db.password %>',
+            database: '<%= db.database %>',
+            port: <%= db.port %>,
+            charset: 'utf8',
+            timezone: "UTC",
         },
         debug: '<%= db.debug %>',
     },

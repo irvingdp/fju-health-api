@@ -19,8 +19,12 @@ const attachProcessToOutput = function(process) {
     });
 };
 
+gulp.task("build", "setup for given environment, options: -e (environment)", function (cb) {
+    runSequence('compile-template', 'build-container' , cb);
+});
+
 gulp.task("setup", "setup for given environment, options: -e (environment)", function (cb) {
-    runSequence('compile-template', 'build-container', 'update-db', cb);
+    runSequence('compile-template', cb);
 });
 
 gulp.task("compile-template", "Compile files under templates/master with given environment, options: -e (environment)", function (cb) {
@@ -56,3 +60,18 @@ gulp.task("rollback-db", "Rollback last db migration using generated knex file",
     let process = exec(`npm run rollback-db`, cb);
     attachProcessToOutput(process);
 });
+
+
+gulp.task('_recreate-db', "[Private] Drop and Recreate DB from knexfinal", async function() {
+    const Knex = require('knex');
+    const knexConfig = require('./gen/knex/knexfile').development;
+    let knex = Knex(knexConfig);
+    await knex.raw(`DROP SCHEMA public CASCADE;`);
+    await knex.raw(`CREATE SCHEMA public;`);
+    knex.destroy();
+});
+
+gulp.task("recreate-db", "Drop all tables in database and update them with knex", function(cb) {
+    runSequence('compile-template', '_recreate-db', 'update-db', cb);
+});
+

@@ -1,6 +1,6 @@
 <%= constant.warning %>
 
-FROM mariadb:10.1
+FROM postgres:9.6.3
 
 LABEL name=fju-health-db
 LABEL group=fju-health

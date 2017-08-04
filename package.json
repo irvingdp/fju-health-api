@@ -20,7 +20,7 @@
     "gulp-template": "^4.0.0",
     "jsonwebtoken": "^7.4.1",
     "knex": "^0.13.0",
-    "mariasql": "^0.2.6",
+    "pg": "^7.0.2",
     "moment": "^2.18.1",
     "objection": "^0.8.4",
     "run-sequence": "^1.1.5",
