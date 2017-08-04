@@ -15,10 +15,13 @@ class Package extends Model {
                 title: {type: 'string'},
                 description: {type: 'string'},
                 price: {type: 'integer'},
+                displayPrice: {type: 'string'},
                 gender: {
                     type: 'string',
                     enum: ['male', 'female'],
                 },
+                groupOrder: {type: 'integer'},
+                order: {type: 'integer'},
                 createdAt: {type: 'dateTime'},
                 updatedAt: {type: 'dateTime'},
             }

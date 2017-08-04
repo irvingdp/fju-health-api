@@ -32,6 +32,8 @@ app.use('/profile', authentication.required(), require("./routers/profile"));
 
 app.use('/reservation', authentication.required(), require("./routers/reservation"));
 
+app.use('/package', authentication.required(), require("./routers/package"));
+
 //error handler middleware
 app.use(function (err, req, res, next) {  // do not remove next as the method signature matters...
     let status, error = {};
