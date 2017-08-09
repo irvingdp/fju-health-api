@@ -3,6 +3,7 @@ const DomainUser = require('../domain/user');
 const DomainReservation = require('../domain/reservation');
 const DomainPackage = require('../domain/package');
 const DomainProfile = require('../domain/profile');
+const moment = require('moment');
 
 const Model = require('objection').Model;
 const Knex = require('knex');
@@ -38,10 +39,12 @@ router.post('/', async (req, res, next) => {
             profileData.userModal = currentUser;
             await domainProfile.createProfile(profileData)
         }
+        let reserveDateTime = moment(req.body.reserveDate).toISOString(); //TODO: default reserve time is 00:00(UTC) , means AM 08:00(+8)
+
         await domainReservation.createReservation({
             userModal: currentUser,
             packageModal: packageModal,
-            reserveDate: req.body.reserveDate,
+            reserveDate: reserveDateTime,
             status: "paymentPending",
             paymentDate: null,
             isSentPackage: false,
