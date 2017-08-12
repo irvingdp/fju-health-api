@@ -18,7 +18,7 @@ Build Project
     cd <project dir>
     npm install
     gulp setup --env={dev}
-    gulp build-api-server
+    gulp build
 
 ```
 
