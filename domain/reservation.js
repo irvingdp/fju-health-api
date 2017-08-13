@@ -16,6 +16,10 @@ class DomainReservation {
             return await reservation.$relatedQuery('package', trx).relate(packageModal);
         })
     }
+
+    async listReservations() {
+        return ReservationModel.query();
+    }
 }
 
 module.exports = DomainReservation;

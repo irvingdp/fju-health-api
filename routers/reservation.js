@@ -19,7 +19,7 @@ let domainProfile = new DomainProfile();
 
 router.post('/', async (req, res, next) => {
     try {
-        let currentUser = await domainUser.getUser({email: req.authentication.email});
+        let currentUsger = await domainUser.getUser({email: req.authentication.email});
         let packageModal = await domainPackage.getPackage({id: req.body.packageId});
 
         let currentProfile = await domainProfile.getProfile(currentUser);
@@ -32,7 +32,7 @@ router.post('/', async (req, res, next) => {
             gender: packageModal.gender
         };
 
-        if(currentProfile) {
+        if (currentProfile) {
             profileData.profileModal = currentProfile;
             await domainProfile.updateProfile(profileData)
         } else {
@@ -54,6 +54,11 @@ router.post('/', async (req, res, next) => {
     } catch (error) {
         next(error);
     }
+});
+
+router.get('/listReservations', async (req, res, next) => {
+    let reservations = await new DomainReservation().listReservations();
+    res.status(200).json(reservations);
 });
 
 module.exports = router;

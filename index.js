@@ -7,6 +7,14 @@ const app = express();
 const swaggerJSDoc = require('swagger-jsdoc');
 const authentication = require('express-authentication');
 
+// allow CORS
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+    next();
+});
+
 app.use(bodyParser.json()); //for parsing application/json
 
 app.use('/', require("./routers/public")); //none auth path
@@ -14,7 +22,7 @@ app.use('/', require("./routers/public")); //none auth path
 // add auth middleware for auth request exclude "./routers/public"
 app.use(function (req, res, next) {
     let authentication = Auth.auth(req.headers.authorization);
-    if(authentication) {
+    if (authentication) {
         req.authenticated = true;
         req.authentication = authentication; //user identify: email
     } else {
@@ -34,11 +42,13 @@ app.use('/reservation', authentication.required(), require("./routers/reservatio
 
 app.use('/package', authentication.required(), require("./routers/package"));
 
+app.use('/admin', require("./routers/reservation")); // TODO: Jeff, Ivan, admin routes will also need authentication...
+
 //error handler middleware
 app.use(function (err, req, res, next) {  // do not remove next as the method signature matters...
     let status, error = {};
 
-    if(err.status === 401 && !err.message) {
+    if (err.status === 401 && !err.message) {
         status = 401;
         error = {
             message: "access denied"
@@ -100,7 +110,6 @@ app.get('/api', function (req, res) {
     res.send(swaggerSpec);
 });
 //end: Initialize swagger
-
 
 var port = process.argv[2] || 3002;
 
