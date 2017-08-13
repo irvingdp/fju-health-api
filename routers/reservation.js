@@ -47,9 +47,7 @@ router.post('/', async (req, res, next) => {
             reserveDate: reserveDateTime,
             status: "paymentPending",
             paymentDate: null,
-            isSentPackage: false,
             sentPackageDate: null,
-            isAgentCalled: false,
             agentCalledDate: null,
         });
         res.status(200).json({});

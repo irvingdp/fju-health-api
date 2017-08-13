@@ -109,9 +109,7 @@ exports.up = function (knex, Promise) {
             t.dateTime('reserveDate');
             t.enu('status', ['paymentPending', 'paymentCompleted']);
             t.dateTime('paymentDate');
-            t.boolean('isSentPackage');
             t.dateTime('sentPackageDate');
-            t.boolean('isAgentCalled');
             t.dateTime('agentCalledDate');
             t.dateTime('createdAt');
             t.dateTime('updatedAt');
