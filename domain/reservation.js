@@ -18,7 +18,7 @@ class DomainReservation {
     }
 
     async listReservations() {
-        return ReservationModel.query();
+        return ReservationModel.query().eager('[user.[profile], package]');
     }
 }
 

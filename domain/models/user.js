@@ -20,6 +20,20 @@ class User extends Model {
             }
         };
     }
+
+    static get relationMappings() {
+        const Profile = require('./profile');
+        return {
+            profile: {
+                relation: Model.HasOneRelation,
+                modelClass: Profile,
+                join: {
+                    from: `${User.tableName}.id`,
+                    to: `${Profile.tableName}.user_id_fk`,
+                }
+            }
+        }
+    }
 }
 
 module.exports = timestampUpdateWrapper(User);
