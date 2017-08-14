@@ -19,7 +19,7 @@ let domainProfile = new DomainProfile();
 
 router.post('/', async (req, res, next) => {
     try {
-        let currentUsger = await domainUser.getUser({email: req.authentication.email});
+        let currentUser = await domainUser.getUser({email: req.authentication.email});
         let packageModal = await domainPackage.getPackage({id: req.body.packageId});
 
         let currentProfile = await domainProfile.getProfile(currentUsger);
@@ -59,6 +59,53 @@ router.post('/', async (req, res, next) => {
 router.get('/listReservations', async (req, res, next) => {
     let reservations = await new DomainReservation().listReservations();
     res.status(200).json(reservations);
+});
+
+router.put('/:reservationId/reserveDate/', async (req, res, next) => {
+    try {
+        let reservationId = req.params.reservationId;
+        let reserveDate = moment(req.body.reserveDate).toISOString();
+        let reservationModel = await new DomainReservation().getReservationById(reservationId);
+        reservationModel = await new DomainReservation().setReservationDate({reservationModel, reserveDate});
+        res.status(200).json(reservationModel);
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.put('/:reservationId/paymentDate/', async (req, res, next) => {
+    try {
+        let reservationId = req.params.reservationId;
+        let reservationModel = await new DomainReservation().getReservationById(reservationId);
+        reservationModel = await new DomainReservation().setPaymentDate({reservationModel, paymentDate});
+        res.status(200).json(reservationModel);
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.put('/:reservationId/sentPackageDate/', async (req, res, next) => {
+    try {
+        let reservationId = req.params.reservationId;
+        let sentPackageDate = moment(req.body.sentPackageDate).toISOString();
+        let reservationModel = await new DomainReservation().getReservationById(reservationId);
+        reservationModel = await new DomainReservation().setPackageSentDate({reservationModel, sentPackageDate});
+        res.status(200).json(reservationModel);
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.put('/:reservationId/agentCalledDate/', async (req, res, next) => {
+    try {
+        let reservationId = req.params.reservationId;
+        let agentCalledDate = moment(req.body.agentCalledDate).toISOString();
+        let reservationModel = await new DomainReservation().getReservationById(reservationId);
+        reservationModel = await new DomainReservation().setAgentCallDate({reservationModel, agentCalledDate});
+        res.status(200).json(reservationModel);
+    } catch (error) {
+        next(error);
+    }
 });
 
 module.exports = router;
