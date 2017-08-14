@@ -5,12 +5,6 @@ const DomainPackage = require('../domain/package');
 const DomainProfile = require('../domain/profile');
 const moment = require('moment');
 
-const Model = require('objection').Model;
-const Knex = require('knex');
-const knexConfig = require('../gen/knex/knexfile');
-let knex = Knex(knexConfig.development);
-Model.knex(knex);
-
 let router = express.Router();
 let domainUser = new DomainUser();
 let domainReservation = new DomainReservation();
@@ -62,10 +56,13 @@ router.get('/getMyLatestReservation', async (req, res) => {
     res.status(200).json(reservation);
 });
 
-
-router.get('/listReservations', async (req, res) => {
-    let reservations = await new DomainReservation().listReservations();
-    res.status(200).json(reservations);
+router.get('/listReservations', async (req, res, next) => {
+    try {
+        let reservations = await new DomainReservation().listReservations();
+        res.status(200).json(reservations);
+    } catch (error) {
+        next(error);
+    }
 });
 
 router.put('/:reservationId/reserveDate/', async (req, res, next) => {

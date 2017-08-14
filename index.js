@@ -7,6 +7,13 @@ const app = express();
 const swaggerJSDoc = require('swagger-jsdoc');
 const authentication = require('express-authentication');
 
+// initialize Knex
+const Model = require('objection').Model;
+const Knex = require('knex');
+const knexConfig = require('./gen/knex/knexfile');
+let knex = Knex(knexConfig.development);
+Model.knex(knex);
+
 // allow CORS
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -42,7 +49,8 @@ app.use('/reservation', authentication.required(), require("./routers/reservatio
 
 app.use('/package', authentication.required(), require("./routers/package"));
 
-app.use('/admin', require("./routers/reservation")); // TODO: Jeff, Ivan, admin routes will also need authentication...
+app.use('/admin/public', require("./routers/admin"));
+app.use('/admin', authentication.required(), require("./routers/reservation")); // TODO: Jeff, need to authenticate 'admin user' vs 'normal user'
 
 //error handler middleware
 app.use(function (err, req, res, next) {  // do not remove next as the method signature matters...
