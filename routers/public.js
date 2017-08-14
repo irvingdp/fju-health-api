@@ -28,10 +28,11 @@ router.post('/register', async (req, res, next) => {
         next(error);
     }
 });
+
 router.post('/login', async (req, res, next) => {
     try {
-        let isLogging = await domainUser.canLoginWithEmailAndPassword(req.body);
-        if(isLogging) {
+        let isLogin = await domainUser.canLoginWithEmailAndPassword(req.body);
+        if (isLogin) {
             res.json({
                 token: Auth.genToken(req.body.email)
             });
