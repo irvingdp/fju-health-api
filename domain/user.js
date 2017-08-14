@@ -1,6 +1,6 @@
 const UserModel = require('./models/user');
 const ProfileModel = require('./models/profile');
-const objection = require('objection');
+const Objection = require('objection');
 const PasswordUtils = require('../utils/passwordUtils');
 const Auth = require('../utils/auth');
 
@@ -11,7 +11,7 @@ class DomainUser {
     }
 
     async registerNewUser({email, password, uid}) {
-        return await objection.transaction(UserModel.knex(), async (trx) => {
+        return await Objection.transaction(UserModel.knex(), async (trx) => {
             return await UserModel.query(trx)
                 .insert({
                     email,
