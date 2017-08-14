@@ -22,7 +22,7 @@ router.post('/', async (req, res, next) => {
         let currentUsger = await domainUser.getUser({email: req.authentication.email});
         let packageModal = await domainPackage.getPackage({id: req.body.packageId});
 
-        let currentProfile = await domainProfile.getProfile(currentUser);
+        let currentProfile = await domainProfile.getProfile(currentUsger);
 
         let profileData = {
             name: req.body.name,
@@ -36,13 +36,13 @@ router.post('/', async (req, res, next) => {
             profileData.profileModal = currentProfile;
             await domainProfile.updateProfile(profileData)
         } else {
-            profileData.userModal = currentUser;
+            profileData.userModal = currentUsger;
             await domainProfile.createProfile(profileData)
         }
         let reserveDateTime = moment(req.body.reserveDate).toISOString(); //TODO: default reserve time is 00:00(UTC) , means AM 08:00(+8)
 
         await domainReservation.createReservation({
-            userModal: currentUser,
+            userModal: currentUsger,
             packageModal: packageModal,
             reserveDate: reserveDateTime,
             status: "paymentPending",
