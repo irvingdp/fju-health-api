@@ -17,12 +17,24 @@ class DomainReservation {
         })
     }
 
+    async getMyLatestReservationByUserId(userId) {
+        return ReservationModel.query().where({user_id_fk: userId}).orderBy('createdAt','desc').first();
+    }
+
+    async getReservationByUser(userModal) {
+        return ReservationModel.query().findById(reservationId);
+    }
+
     async getReservationById(reservationId) {
         return ReservationModel.query().findById(reservationId);
     }
 
     async listReservations() {
         return ReservationModel.query().eager('[user.[profile], package]');
+    }
+
+    async listReservations() {
+        return ReservationModel.query();
     }
 
     async setReservationDate({reservationModel, reserveDate}) {

@@ -23,6 +23,7 @@ class User extends Model {
 
     static get relationMappings() {
         const Profile = require('./profile');
+        const Reservation = require('./reservation');
         return {
             profile: {
                 relation: Model.HasOneRelation,

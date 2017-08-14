@@ -52,6 +52,8 @@ app.use('/package', authentication.required(), require("./routers/package"));
 app.use('/admin/public', require("./routers/admin"));
 app.use('/admin', authentication.required(), require("./routers/reservation")); // TODO: Jeff, need to authenticate 'admin user' vs 'normal user'
 
+app.use('/dashboard', authentication.required(), require("./routers/dashboard"));
+
 //error handler middleware
 app.use(function (err, req, res, next) {  // do not remove next as the method signature matters...
     let status, error = {};
