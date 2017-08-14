@@ -50,12 +50,6 @@ router.post('/', async (req, res, next) => {
     }
 });
 
-router.get('/getMyLatestReservation', async (req, res) => {
-    let currentUser = await domainUser.getUser({email: req.authentication.email});
-    let reservation = await new DomainReservation().getMyLatestReservationByUserId(currentUser.id);
-    res.status(200).json(reservation);
-});
-
 router.get('/listReservations', async (req, res, next) => {
     try {
         let reservations = await new DomainReservation().listReservations();
