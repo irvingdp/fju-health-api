@@ -5,12 +5,6 @@ const DomainPackage = require('../domain/package');
 const DomainProfile = require('../domain/profile');
 const moment = require('moment');
 
-const Model = require('objection').Model;
-const Knex = require('knex');
-const knexConfig = require('../gen/knex/knexfile');
-let knex = Knex(knexConfig.development);
-Model.knex(knex);
-
 let router = express.Router();
 let domainUser = new DomainUser();
 let domainReservation = new DomainReservation();

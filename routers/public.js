@@ -3,13 +3,6 @@ const DomainUser = require('../domain/user');
 const Auth = require('../utils/auth')
 const {UserAlreadyRegisteredError, UserLoginFailedError} = require('../error/error');
 
-const Model = require('objection').Model;
-const Knex = require('knex');
-const knexConfig = require('../gen/knex/knexfile');
-let knex = Knex(knexConfig.development);
-Model.knex(knex);
-
-
 let router = express.Router();
 let domainUser = new DomainUser();
 

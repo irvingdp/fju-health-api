@@ -7,6 +7,13 @@ const app = express();
 const swaggerJSDoc = require('swagger-jsdoc');
 const authentication = require('express-authentication');
 
+// initialize Knex
+const Model = require('objection').Model;
+const Knex = require('knex');
+const knexConfig = require('./gen/knex/knexfile');
+let knex = Knex(knexConfig.development);
+Model.knex(knex);
+
 // allow CORS
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
