@@ -1,6 +1,6 @@
 const express = require('express');
 const DomainUser = require('../domain/user');
-const Auth = require('../utils/auth')
+const Auth = require('../utils/auth');
 const {UserAlreadyRegisteredError, UserLoginFailedError} = require('../error/error');
 
 let router = express.Router();
