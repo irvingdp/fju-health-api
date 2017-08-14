@@ -49,7 +49,8 @@ app.use('/reservation', authentication.required(), require("./routers/reservatio
 
 app.use('/package', authentication.required(), require("./routers/package"));
 
-app.use('/admin', require("./routers/reservation"), require("./routers/admin")); // TODO: Jeff, Ivan, admin routes will also need authentication...
+app.use('/admin/public', require("./routers/admin"));
+app.use('/admin', authentication.required(), require("./routers/reservation"));
 
 //error handler middleware
 app.use(function (err, req, res, next) {  // do not remove next as the method signature matters...

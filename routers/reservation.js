@@ -51,8 +51,12 @@ router.post('/', async (req, res, next) => {
 });
 
 router.get('/listReservations', async (req, res, next) => {
-    let reservations = await new DomainReservation().listReservations();
-    res.status(200).json(reservations);
+    try {
+        let reservations = await new DomainReservation().listReservations();
+        res.status(200).json(reservations);
+    } catch (error) {
+        next(error);
+    }
 });
 
 router.put('/:reservationId/reserveDate/', async (req, res, next) => {
