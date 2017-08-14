@@ -14,9 +14,9 @@ let domainProfile = new DomainProfile();
 
 router.post('/', async (req, res, next) => {
     try {
-        let currentUsger = await domainUser.getUser({email: req.authentication.email});
+        let currentUser = await domainUser.getUser({email: req.authentication.email});
         await domainProfile.createProfile({
-            userModal: currentUsger,
+            userModal: currentUser,
             name: req.body.name,
             birthday: req.body.birthday,
             gender: req.body.gender,
