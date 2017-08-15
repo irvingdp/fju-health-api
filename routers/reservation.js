@@ -74,6 +74,7 @@ router.put('/:reservationId/reserveDate/', async (req, res, next) => {
 router.put('/:reservationId/paymentDate/', async (req, res, next) => {
     try {
         let reservationId = req.params.reservationId;
+        let paymentDate = moment(req.body.paymentDate).toISOString();
         let reservationModel = await new DomainReservation().getReservationById(reservationId);
         reservationModel = await new DomainReservation().setPaymentDate({reservationModel, paymentDate});
         res.status(200).json(reservationModel);
