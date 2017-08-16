@@ -29,6 +29,7 @@ class Reservation extends Model {
     static get relationMappings() {
         const User = require('./user');
         const Package = require('./package');
+        const Reminder = require('./reminder');
         return {
             user: {
                 relation: Model.BelongsToOneRelation,
@@ -44,6 +45,14 @@ class Reservation extends Model {
                 join: {
                     from: `${Reservation.tableName}.package_id_fk`,
                     to: `${Package.tableName}.id`,
+                }
+            },
+            reminder: {
+                relation: Model.HasManyRelation,
+                modelClass: Reminder,
+                join: {
+                    from: `${Reminder.tableName}.reservation_id_fk`,
+                    to: `${Reservation.tableName}.id`,
                 }
             }
         }

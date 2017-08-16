@@ -19,7 +19,7 @@ class DomainReservation {
     }
 
     async getMyLatestReservationByUserId(userId) {
-        return ReservationModel.query().where({user_id_fk: userId}).orderBy('createdAt','desc').first();
+        return ReservationModel.query().where({user_id_fk: userId}).orderBy('createdAt','desc').first().eager('[reminder, package]');
     }
 
     async getReservationByUser(userModal) {

@@ -14,11 +14,11 @@ let domainPackage = new DomainPackage();
 router.get('/', async (req, res, next) => {
     try {
         let currentUser = await domainUser.getUser({email: req.authentication.email});
-        let reservation = await domainReservation.getMyLatestReservationByUserId(currentUser.id);
+        let reserved = await domainReservation.getMyLatestReservationByUserId(currentUser.id);
         let profile = await domainProfile.getProfile(currentUser);
         let package = await domainPackage.listPackages();
         res.status(200).json({
-            reservation: reservation,
+            reserved: reserved,
             profile: profile,
             package: package,
         });
