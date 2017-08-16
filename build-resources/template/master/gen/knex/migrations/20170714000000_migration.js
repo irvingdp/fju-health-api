@@ -116,8 +116,18 @@ exports.up = function (knex, Promise) {
             t.integer('user_id_fk').unsigned().references('id').inTable('User');
             t.integer('package_id_fk').unsigned().references('id').inTable('Package');
         });
-    })
-
+    }).then(function () {
+        return knex.schema.createTable('Reminder', function (t) {
+            t.increments('id').unsigned().primary();
+            t.string('title');
+            t.string('description');
+            t.boolean('isSent');
+            t.dateTime('notifyDate');
+            t.dateTime('createdAt');
+            t.dateTime('updatedAt');
+            t.integer('reservation_id_fk').unsigned().references('id').inTable('Reservation');
+        });
+    });
 };
 
 exports.down = function (knex, Promise) {

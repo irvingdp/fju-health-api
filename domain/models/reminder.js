@@ -24,7 +24,7 @@ class Reminder extends Model {
     static get relationMappings() {
         const Reservation = require('./reservation');
         return {
-            user: {
+            reservation: {
                 relation: Model.BelongsToOneRelation,
                 modelClass: Reservation,
                 join: {
