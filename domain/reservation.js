@@ -13,7 +13,8 @@ class DomainReservation {
                     agentCalledDate
                 });
             await reservation.$relatedQuery('user', trx).relate(userModal);
-            return await reservation.$relatedQuery('package', trx).relate(packageModal);
+            await reservation.$relatedQuery('package', trx).relate(packageModal);
+            return reservation;
         })
     }
 
@@ -31,10 +32,6 @@ class DomainReservation {
 
     async listReservations() {
         return ReservationModel.query().eager('[user.[profile], package]');
-    }
-
-    async listReservations() {
-        return ReservationModel.query();
     }
 
     async setReservationDate({reservationModel, reserveDate}) {
