@@ -5,6 +5,7 @@ const DomainPackage = require('../domain/package');
 const DomainProfile = require('../domain/profile');
 const DomainReminder = require('../domain/reminder');
 const moment = require('moment');
+const Enums = require('../enums');
 
 let router = express.Router();
 let domainUser = new DomainUser();
@@ -12,15 +13,6 @@ let domainReservation = new DomainReservation();
 let domainPackage = new DomainPackage();
 let domainProfile = new DomainProfile();
 let domainReminder = new DomainReminder();
-
-const REMINDER_KEYS = {
-    LOW_RESIDUE_DIET_1: "LOW_RESIDUE_DIET_1", // am 8:00 of before 3 days
-    LOW_RESIDUE_DIET_2: "LOW_RESIDUE_DIET_2", // am 8:00 of before 2 days
-    SPECIMEN_COLLECTION: "SPECIMEN_COLLECTION", // am 8:00 of before 1 days
-    //CATHARTIC_1: "CATHARTIC_1", //last day pm 8:00
-    //CATHARTIC_2: "CATHARTIC_2", //last day pm 10:00
-    CATHARTIC: "CATHARTIC", //reservation day am 3:00
-};
 
 router.post('/', async (req, res, next) => {
     try {
@@ -57,26 +49,22 @@ router.post('/', async (req, res, next) => {
         });
         //TODO: transation not working.. trx need pass to every await...
         await domainReminder.createReminder({
-            key: REMINDER_KEYS.LOW_RESIDUE_DIET_1,
-            notifyDate:  moment(req.body.reserveDate).subtract(3, "days").toISOString(), //TODO: confirm the date
+            key: Enums.reminderKeys.LOW_RESIDUE_DIET_1,
             isSent: false,
             reservationModal
         });
         await domainReminder.createReminder({
-            key: REMINDER_KEYS.LOW_RESIDUE_DIET_2,
-            notifyDate:  moment(req.body.reserveDate).subtract(2, "days").toISOString(), //TODO: confirm the date
+            key: Enums.reminderKeys.LOW_RESIDUE_DIET_2,
             isSent: false,
             reservationModal
         });
         await domainReminder.createReminder({
-            key: REMINDER_KEYS.SPECIMEN_COLLECTION,
-            notifyDate:  moment(req.body.reserveDate).subtract(1, "days").toISOString(), //TODO: confirm the date
+            key: Enums.reminderKeys.SPECIMEN_COLLECTION,
             isSent: false,
             reservationModal
         });
         await domainReminder.createReminder({
-            key: REMINDER_KEYS.CATHARTIC,
-            notifyDate:  moment(req.body.reserveDate).subtract(5, "hours").toISOString(), //TODO: confirm the date
+            key: Enums.reminderKeys.CATHARTIC,
             isSent: false,
             reservationModal
         });

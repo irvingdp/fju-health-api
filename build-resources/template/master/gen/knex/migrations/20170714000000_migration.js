@@ -121,7 +121,6 @@ exports.up = function (knex, Promise) {
             t.increments('id').unsigned().primary();
             t.string('key');
             t.boolean('isSent');
-            t.dateTime('notifyDate');
             t.dateTime('createdAt');
             t.dateTime('updatedAt');
             t.integer('reservation_id_fk').unsigned().references('id').inTable('Reservation');

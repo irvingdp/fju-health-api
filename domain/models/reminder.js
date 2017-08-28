@@ -13,12 +13,11 @@ class Reminder extends Model {
 
             properties: {
                 id: {type: 'integer'},
-                notifyDate: {type: 'dateTime'},
                 key: {type: 'string'},
                 isSent: {type: 'boolean'},
                 reservation_id_fk: {type: 'references'},
             }
-        };
+        }
     }
 
     static get relationMappings() {
@@ -46,7 +45,6 @@ class Reminder extends Model {
     get description() {
         return appLabel[this.key] ? appLabel[this.key].description : "";
     }
-
 }
 
 module.exports = timestampUpdateWrapper(Reminder);
