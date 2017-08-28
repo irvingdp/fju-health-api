@@ -1,5 +1,6 @@
 const Model = require('objection').Model;
 const timestampUpdateWrapper = require('./wrappers/timestampUpdateWrapper');
+const appLabel = require('../../AppLabels')
 
 class Reminder extends Model {
     static get tableName() {
@@ -13,8 +14,7 @@ class Reminder extends Model {
             properties: {
                 id: {type: 'integer'},
                 notifyDate: {type: 'dateTime'},
-                title: {type: 'string'},
-                description: {type: 'string'},
+                key: {type: 'string'},
                 isSent: {type: 'boolean'},
                 reservation_id_fk: {type: 'references'},
             }
@@ -34,6 +34,19 @@ class Reminder extends Model {
             }
         }
     }
+
+    static get virtualAttributes() {
+        return ['title', 'description'];
+    }
+
+    get title() {
+        return appLabel[this.key] ? appLabel[this.key].title : "";
+    }
+
+    get description() {
+        return appLabel[this.key] ? appLabel[this.key].description : "";
+    }
+
 }
 
 module.exports = timestampUpdateWrapper(Reminder);

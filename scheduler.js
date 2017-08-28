@@ -8,6 +8,13 @@ var eightAmScheduler = schedule.scheduleJob('0 0 8 * * *', function () {
     // TODO: Ivan, everyday at 8am here...
 });
 
+var eightPmScheduler = schedule.scheduleJob('0 0 20 * * *', function () {
+    // TODO: Ivan, everyday at 3am here...
+});
+
+var tenPmScheduler = schedule.scheduleJob('0 0 22 * * *', function () {
+    // TODO: Ivan, everyday at 3am here...
+});
 // uncomment the following to verify your cron expression
 /*
 const parser = require('cron-parser');

@@ -13,6 +13,15 @@ let domainPackage = new DomainPackage();
 let domainProfile = new DomainProfile();
 let domainReminder = new DomainReminder();
 
+const REMINDER_KEYS = {
+    LOW_RESIDUE_DIET_1: "LOW_RESIDUE_DIET_1", // am 8:00 of before 3 days
+    LOW_RESIDUE_DIET_2: "LOW_RESIDUE_DIET_2", // am 8:00 of before 2 days
+    SPECIMEN_COLLECTION: "SPECIMEN_COLLECTION", // am 8:00 of before 1 days
+    //CATHARTIC_1: "CATHARTIC_1", //last day pm 8:00
+    //CATHARTIC_2: "CATHARTIC_2", //last day pm 10:00
+    CATHARTIC: "CATHARTIC", //reservation day am 3:00
+};
+
 router.post('/', async (req, res, next) => {
     try {
         let currentUser = await domainUser.getUser({email: req.authentication.email});
@@ -48,36 +57,25 @@ router.post('/', async (req, res, next) => {
         });
         //TODO: transation not working.. trx need pass to every await...
         await domainReminder.createReminder({
-            title: "REMINDER 1",
-            description: "Please read the Checkup Manual. We will also send you reminders via the app to guide you on pre-examination process.",
-            notifyDate:  moment(req.body.reserveDate).subtract(6, "days").toISOString(), //TODO: confirm the date
-            isSent: false,
-            reservationModal
-        });
-        await domainReminder.createReminder({
-            title: "REMINDER 2",
-            description: "Please take your special meal 1.",
+            key: REMINDER_KEYS.LOW_RESIDUE_DIET_1,
             notifyDate:  moment(req.body.reserveDate).subtract(3, "days").toISOString(), //TODO: confirm the date
             isSent: false,
             reservationModal
         });
         await domainReminder.createReminder({
-            title: "REMINDER 3",
-            description: "Please take your special meal 2.",
+            key: REMINDER_KEYS.LOW_RESIDUE_DIET_2,
             notifyDate:  moment(req.body.reserveDate).subtract(2, "days").toISOString(), //TODO: confirm the date
             isSent: false,
             reservationModal
         });
         await domainReminder.createReminder({
-            title: "REMINDER 4",
-            description: "Please collect your body waste",
+            key: REMINDER_KEYS.SPECIMEN_COLLECTION,
             notifyDate:  moment(req.body.reserveDate).subtract(1, "days").toISOString(), //TODO: confirm the date
             isSent: false,
             reservationModal
         });
         await domainReminder.createReminder({
-            title: "REMINDER 5",
-            description: "Please take your medicine at 3-5am to clean your colon. The hospital will give you a reminder call.",
+            key: REMINDER_KEYS.CATHARTIC,
             notifyDate:  moment(req.body.reserveDate).subtract(5, "hours").toISOString(), //TODO: confirm the date
             isSent: false,
             reservationModal

@@ -119,8 +119,7 @@ exports.up = function (knex, Promise) {
     }).then(function () {
         return knex.schema.createTable('Reminder', function (t) {
             t.increments('id').unsigned().primary();
-            t.string('title');
-            t.string('description');
+            t.string('key');
             t.boolean('isSent');
             t.dateTime('notifyDate');
             t.dateTime('createdAt');

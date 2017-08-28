@@ -2,12 +2,11 @@ const ReminderModel = require('./models/reminder');
 const objection = require('objection');
 
 class DomainReminder {
-    async createReminder({title, description, notifyDate, isSent, reservationModal}) {
+    async createReminder({key, notifyDate, isSent, reservationModal}) {
         return await objection.transaction(ReminderModel.knex(), async (trx) => {
             let reminder = await ReminderModel.query()
                 .insert({
-                    title,
-                    description,
+                    key,
                     notifyDate,
                     isSent,
                 });
