@@ -21,9 +21,10 @@
     "gulp-template": "^4.0.0",
     "jsonwebtoken": "^7.4.1",
     "knex": "^0.13.0",
-    "pg": "^7.0.2",
     "moment": "^2.18.1",
+    "node-schedule": "^1.2.4",
     "objection": "^0.8.4",
+    "pg": "^7.0.2",
     "run-sequence": "^1.1.5",
     "swagger-jsdoc": "^1.9.6",
     "yargs": "^4.7.1"
