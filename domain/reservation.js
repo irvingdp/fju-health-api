@@ -49,6 +49,10 @@ class DomainReservation {
     async setAgentCallDate({reservationModel, agentCalledDate}) {
         return reservationModel.$query().patchAndFetch({agentCalledDate});
     }
+
+    async getPaidReservation() {
+        return ReservationModel.query().where({status: "paymentPending"}).eager('[reminder]');
+    }
 }
 
 module.exports = DomainReservation;

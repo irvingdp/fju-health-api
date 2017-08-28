@@ -14,6 +14,8 @@ const knexConfig = require('./gen/knex/knexfile');
 let knex = Knex(knexConfig.development);
 Model.knex(knex);
 
+const scheduler = require('./scheduler');
+
 // allow CORS
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -132,4 +134,4 @@ app.listen(port, function () {
     console.log('FJU Health API listening on port ' + port);
 });
 
-
+scheduler.startAll();
