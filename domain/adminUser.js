@@ -27,6 +27,11 @@ class DomainAdminUser {
                 .pick(['email']);
         });
     }
+
+    async listAllAdminUserEmails() {
+        let result = await AdminUserModel.query().select('email');
+        return result;
+    }
 }
 
 module.exports = DomainAdminUser;

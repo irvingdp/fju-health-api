@@ -13,6 +13,10 @@ const variables = {
         password: "admin",
         debug: true
     },
+    mailgun: {
+        apiKey: "key-7550b9097f7d7fb47547334f04ad363e",
+        domain: "iask.today",
+    },
 };
 
 module.exports = variables;

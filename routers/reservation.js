@@ -4,8 +4,10 @@ const DomainReservation = require('../domain/reservation');
 const DomainPackage = require('../domain/package');
 const DomainProfile = require('../domain/profile');
 const DomainReminder = require('../domain/reminder');
+const DomainAdminUser = require('../domain/adminUser');
 const moment = require('moment');
 const Enums = require('../enums');
+const MailUtil = require('../utils/mail');
 
 let router = express.Router();
 let domainUser = new DomainUser();
@@ -13,15 +15,17 @@ let domainReservation = new DomainReservation();
 let domainPackage = new DomainPackage();
 let domainProfile = new DomainProfile();
 let domainReminder = new DomainReminder();
+let domainAdminUser = new DomainAdminUser();
+let mailUtil = new MailUtil();
 
 router.post('/', async (req, res, next) => {
+    let currentUser, currentProfile, packageModal, profileData;
     try {
-        let currentUser = await domainUser.getUser({email: req.authentication.email});
-        let packageModal = await domainPackage.getPackage({id: req.body.packageId});
+        currentUser = await domainUser.getUser({email: req.authentication.email});
+        packageModal = await domainPackage.getPackage({id: req.body.packageId});
+        currentProfile = await domainProfile.getProfile(currentUser);
 
-        let currentProfile = await domainProfile.getProfile(currentUser);
-
-        let profileData = {
+        profileData = {
             name: req.body.name,
             birthday: req.body.birthday,
             phoneNumber: req.body.phoneNumber,
@@ -68,7 +72,27 @@ router.post('/', async (req, res, next) => {
             isSent: false,
             reservationModal
         });
+
+        //send email to admin user after reserved
+        try {
+            let adminUserEmails = await domainAdminUser.listAllAdminUserEmails();
+            if(adminUserEmails && adminUserEmails.length > 0) {
+                await mailUtil.sendMail({
+                    recipient: adminUserEmails.map(admin => admin.email).join(","),
+                    subject: "fju service notification - reservation incoming",
+                    body: "[Reservation information] \n"
+                    + "name:" + profileData.name + "\n"
+                    + "phone:" + profileData.phoneNumber + "\n"
+                    + "address:" + profileData.contactAddress + "\n"
+                })
+            }
+        } catch (error) {
+            //if any send email error , catch here and still response 200
+            console.log(error);
+        }
+
         res.status(200).json({});
+
     } catch (error) {
         next(error);
     }
@@ -101,6 +125,7 @@ router.put('/:reservationId/paymentDate/', async (req, res, next) => {
         let paymentDate = moment(req.body.paymentDate).toISOString();
         let reservationModel = await new DomainReservation().getReservationById(reservationId);
         reservationModel = await new DomainReservation().setPaymentDate({reservationModel, paymentDate});
+
         res.status(200).json(reservationModel);
     } catch (error) {
         next(error);
