@@ -14,8 +14,10 @@ const Enums = require("./enums");
 const fcm = require('./utils/fcm')
 const reminderManager = require('./utils/reminderManager')
 const DomainReservation = require('./domain/reservation');
+const DomainReminder = require('./domain/reminder');
 
 var domainReservation = new DomainReservation();
+var domainReminder = new DomainReminder();
 
 const _getNeedNotificationReminders = ({keys}) => {
     return new Promise(function (resolve, reject) {
@@ -24,17 +26,17 @@ const _getNeedNotificationReminders = ({keys}) => {
             (paidReservations || []).forEach(paidReservation => {
                 (paidReservation.reminder || []).forEach(reminder => {
                     let reminderNotifyDate = reminderManager.getNotifyDate(reminder.key, paidReservation.reserveDate);
-                    //find the special key and today's reminders
-                    if(keys.indexOf(reminder.key) > -1 && moment().utc().diff(reminderNotifyDate, 'days') === 0) {
+                    //find the special key and today's not yet sent reminders
+                    if (!reminder.isSent &&
+                        keys.indexOf(reminder.key) > -1 &&
+                        moment().utc().diff(reminderNotifyDate, 'days') === 0
+                    ) {
                         result.push(reminder);
                     }
                 })
             });
             resolve(result);
-        }).catch(err => {
-            console.log(err);
-            reject(err);
-        });
+        })
     })
 };
 
@@ -46,7 +48,10 @@ const _push = (reminders) => {
             body: reminder.description,
             title: reminder.title
         }).then(result => {
-            console.log(result)
+            if (result) {
+                return domainReminder.setIsSent({reminderModel: reminder, isSent: true})
+            }
+            console.log(result);
         })
     })
 }
@@ -58,9 +63,7 @@ const scheduler = {
         threeAmScheduler = schedule.scheduleJob('0 0 3 * * *', function () {
             _getNeedNotificationReminders({keys: [Enums.reminderKeys.CATHARTIC]}).then(reminders => {
                 //do post to push notification.
-                (reminders || []).forEach(reminder => {
-                    _push(reminder)
-                })
+                _push(reminders)
             }).catch(err => {
                 console.log(err);
             })
@@ -70,9 +73,7 @@ const scheduler = {
             _getNeedNotificationReminders({
                 keys: [Enums.reminderKeys.LOW_RESIDUE_DIET_1, Enums.reminderKeys.LOW_RESIDUE_DIET_2, Enums.reminderKeys.SPECIMEN_COLLECTION],
             }).then(reminders => {
-                (reminders || []).forEach(reminder => {
-                    _push(reminder)
-                })
+                _push(reminders)
             }).catch(err => {
                 console.log(err);
             })
@@ -82,7 +83,7 @@ const scheduler = {
     cancelAll: () => {
         threeAmScheduler && threeAmScheduler.cancel();
         eightAmScheduler && eightAmScheduler.cancel();
-    }
+    },
 }
 
 module.exports = scheduler;

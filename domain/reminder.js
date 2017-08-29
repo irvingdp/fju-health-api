@@ -12,6 +12,10 @@ class DomainReminder {
             return await reminder.$relatedQuery('reservation', trx).relate(reservationModal);
         })
     }
+
+    async setIsSent({reminderModel, isSent}) {
+        return reminderModel.$query().patchAndFetch({isSent});
+    }
 }
 
 module.exports = DomainReminder;
