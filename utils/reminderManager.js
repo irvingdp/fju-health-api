@@ -10,11 +10,14 @@ const ReminderManager = {
             case Enums.reminderKeys.LOW_RESIDUE_DIET_2:
                 return moment(reserveDate).subtract(2, "days").toISOString();
 
+            case Enums.reminderKeys.LOW_RESIDUE_DIET_3:
+                return moment(reserveDate).subtract(1, "days").toISOString();
+
             case Enums.reminderKeys.SPECIMEN_COLLECTION:
                 return moment(reserveDate).subtract(1, "days").toISOString();
 
             case Enums.reminderKeys.CATHARTIC:
-                return moment(reserveDate).subtract(5, "hours").toISOString();;
+                return moment(reserveDate).subtract(5, "hours").toISOString();
         }
     },
 };

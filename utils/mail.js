@@ -3,9 +3,8 @@ const mailgun = require('mailgun-js')({apiKey: Config.apiKey, domain: Config.dom
 
 class Mail {
     async sendMail({recipient, subject, body}) {
-        //TODO: (Erwin) mailgun data requirements
         let data = {
-            from: 'fju-app-service <fju-app-service@fjuservice.test>',
+            from: 'fju-app-service <fju-app-service@fju.service>',
             to: recipient,
             subject: subject,
             text: body,

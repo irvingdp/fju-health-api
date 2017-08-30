@@ -13,6 +13,7 @@ const variables = {
         password: "admin",
         debug: true
     },
+    //TODO: replace to fju account (need a domain)
     mailgun: {
         apiKey: "key-7550b9097f7d7fb47547334f04ad363e",
         domain: "iask.today",

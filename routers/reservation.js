@@ -63,6 +63,11 @@ router.post('/', async (req, res, next) => {
             reservationModal
         });
         await domainReminder.createReminder({
+            key: Enums.reminderKeys.LOW_RESIDUE_DIET_3,
+            isSent: false,
+            reservationModal
+        });
+        await domainReminder.createReminder({
             key: Enums.reminderKeys.SPECIMEN_COLLECTION,
             isSent: false,
             reservationModal
@@ -74,6 +79,7 @@ router.post('/', async (req, res, next) => {
         });
 
         //send email to admin user after reserved
+        //TODO: design the mail's content?
         try {
             let adminUserEmails = await domainAdminUser.listAllAdminUserEmails();
             if(adminUserEmails && adminUserEmails.length > 0) {

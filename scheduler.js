@@ -62,7 +62,6 @@ const scheduler = {
     startAll: () => {
         threeAmScheduler = schedule.scheduleJob('0 0 3 * * *', function () {
             _getNeedNotificationReminders({keys: [Enums.reminderKeys.CATHARTIC]}).then(reminders => {
-                //do post to push notification.
                 _push(reminders)
             }).catch(err => {
                 console.log(err);
@@ -71,7 +70,12 @@ const scheduler = {
         console.log('start am 3:00 push reminder scheduler');
         eightAmScheduler = schedule.scheduleJob('0 0 8 * * *', function () {
             _getNeedNotificationReminders({
-                keys: [Enums.reminderKeys.LOW_RESIDUE_DIET_1, Enums.reminderKeys.LOW_RESIDUE_DIET_2, Enums.reminderKeys.SPECIMEN_COLLECTION],
+                keys: [
+                    Enums.reminderKeys.LOW_RESIDUE_DIET_1,
+                    Enums.reminderKeys.LOW_RESIDUE_DIET_2,
+                    Enums.reminderKeys.LOW_RESIDUE_DIET_3,
+                    Enums.reminderKeys.SPECIMEN_COLLECTION
+                ],
             }).then(reminders => {
                 _push(reminders)
             }).catch(err => {
