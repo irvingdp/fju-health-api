@@ -39,7 +39,7 @@ class DomainReservation {
     }
 
     async setPaymentDate({reservationModel, paymentDate}) {
-        return reservationModel.$query().patchAndFetch({paymentDate});
+        return reservationModel.$query().patchAndFetch({paymentDate, status: 'paymentCompleted'});
     }
 
     async setPackageSentDate({reservationModel, sentPackageDate}) {
