@@ -32,10 +32,34 @@ router.get('/', async (req, res, next) => {
 
         let profile = await domainProfile.getProfile(currentUser);
         let package = await domainPackage.listPackages();
+
+        //TODO: mock the test data first for testing. report should order by date desc
+
+        let report = [
+            {
+                reservation: {
+                    reserveDate: "2017-08-30T00:00:00.000Z",
+                    package: package[1]
+                }
+            },
+            {
+                reservation: {
+                    reserveDate: "2016-08-31T00:00:00.000Z",
+                    package: package[2]
+                }
+            },
+            {
+                reservation: {
+                    reserveDate: "2015-08-30T00:00:00.000Z",
+                    package: package[3]
+                }
+            }
+        ]
         res.status(200).json({
             reserved: reserved,
             profile: profile,
             package: package,
+            report: report,
         });
     } catch (error) {
         next(error);
