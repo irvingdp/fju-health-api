@@ -8,6 +8,10 @@ let domainAdminUser = new DomainAdminUser();
 
 router.post('/login', async (req, res, next) => {
     try {
+        let {email, password} = req.body;
+        if(!email || !password) {
+            throw new UserLoginFailedError()
+        }
         let isLogin = await domainAdminUser.canLoginWithEmailAndPassword(req.body);
         if (isLogin) {
             res.json({
