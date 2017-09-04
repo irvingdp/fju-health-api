@@ -16,8 +16,8 @@ class DomainProfile {
         })
     }
 
-    async updateProfile({profileModal, name, birthday, gender, contactAddress, phoneNumber}) {
-        return await profileModal.$query().update({name, birthday, gender, contactAddress, phoneNumber});
+    async updateProfile({profileModal, name, contactAddress, phoneNumber}) {
+        return await profileModal.$query().patchAndFetch({name, contactAddress, phoneNumber});
     }
 
     async getProfile(userModal) {

@@ -20,10 +20,17 @@ class PermissionDeniedError extends Error {
         this.status = 401;
     }
 }
-
+class DuplicateProfileError extends Error {
+    constructor(message="duplicate profile.") {
+        super(message);
+        this.name = this.constructor.name;
+        this.status = 500;
+    }
+}
 
 module.exports = {
     UserAlreadyRegisteredError,
     UserLoginFailedError,
     PermissionDeniedError,
+    DuplicateProfileError,
 };

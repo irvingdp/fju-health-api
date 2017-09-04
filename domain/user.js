@@ -34,6 +34,10 @@ class DomainUser {
     async getUser({email}) {
         return await UserModel.query().where({email}).first();
     }
+
+    async getUserWithProfile({email}) {
+        return await UserModel.query().where({email}).first().eager("profile");
+    }
 }
 
 module.exports = DomainUser;
