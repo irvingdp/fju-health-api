@@ -23,7 +23,8 @@ class User extends Model {
 
     static get relationMappings() {
         const Profile = require('./profile');
-        const Reservation = require('./reservation');
+        const Reservation = require('./reservation')
+        const Device = require('./device');
         return {
             profile: {
                 relation: Model.HasOneRelation,
@@ -31,6 +32,14 @@ class User extends Model {
                 join: {
                     from: `${User.tableName}.id`,
                     to: `${Profile.tableName}.user_id_fk`,
+                }
+            },
+            device: {
+                relation: Model.HasManyRelation,
+                modelClass: Device,
+                join: {
+                    from: `${User.tableName}.id`,
+                    to: `${Device.tableName}.user_id_fk`,
                 }
             }
         }

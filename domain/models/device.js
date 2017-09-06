@@ -12,7 +12,7 @@ class Device extends Model {
 
             properties: {
                 id: {type: 'integer'},
-                uuid: {type: 'string'},
+                token: {type: 'string'},
                 createdAt: {type: 'dateTime'},
                 updatedAt: {type: 'dateTime'},
                 user_id_fk: {type: 'references'},

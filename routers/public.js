@@ -1,10 +1,12 @@
 const express = require('express');
 const DomainUser = require('../domain/user');
 const Auth = require('../utils/auth');
+const DomainDevice = require('../domain/device');
 const {UserAlreadyRegisteredError, UserLoginFailedError} = require('../error/error');
 
 let router = express.Router();
 let domainUser = new DomainUser();
+let domainDevice = new DomainDevice();
 
 router.post('/register', async (req, res, next) => {
     try {
@@ -37,5 +39,18 @@ router.post('/login', async (req, res, next) => {
     }
 });
 
+router.post('/fcmtoken', async (req, res, next) => {
+    try {
+        let device = await domainDevice.getDeviceByToken(req.body.fcm_token);
+        if(!device) {
+            await domainDevice.createDevice({
+                token: req.body.fcm_token,
+            });
+        }
+        res.status(200).json({});
+    } catch (error) {
+        next(error);
+    }
+});
 
 module.exports = router;
