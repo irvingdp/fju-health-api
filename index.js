@@ -61,6 +61,8 @@ app.use('/admin', authentication.required(), require("./routers/reservation")); 
 
 app.use('/dashboard', authentication.required(), require("./routers/dashboard"));
 
+app.use('/device', authentication.required(), require("./routers/device"));
+
 //error handler middleware
 app.use(function (err, req, res, next) {  // do not remove next as the method signature matters...
     let status, error = {};
