@@ -40,18 +40,20 @@ const _getNeedNotificationReminders = ({keys}) => {
     })
 };
 
-const _push = (reminders) => {
+const _sendToFcm = (reminders) => {
     (reminders || []).forEach(reminder => {
-        fcm.push({
-            registration_token: "cETvNBcZCeM:APA91bHwuQyFxCFKHnK-RGASxLzcyWtksSSI5eG7YpbuKzfyJONZp09fWhHxm3ycHj29MXKQ_RwcYk7lUtkYsSscCpbG9SO01vvDnu1GtI8OcbxvrRzNtCJP-5SoPdJ98-dPHvhbsns9",
-            //TODO: get registration_token from modal(db) ,reminder.token
-            body: reminder.description,
-            title: reminder.title
-        }).then(result => {
-            if (result) {
-                return domainReminder.setIsSent({reminderModel: reminder, isSent: true})
-            }
-            console.log(result);
+        let devices = reminder.reservation.user.device;
+        (devices || []).forEach(device => {
+            fcm.push({
+                registration_token: device.token,
+                body: reminder.description,
+                title: reminder.title
+            }).then(result => {
+                result && domainReminder.setIsSent({reminderModel: reminder, isSent: true})
+                console.log(result);
+            }).catch(err => {
+                console.log(err);
+            })
         })
     })
 }
@@ -62,7 +64,7 @@ const scheduler = {
     startAll: () => {
         threeAmScheduler = schedule.scheduleJob('0 0 3 * * *', function () {
             _getNeedNotificationReminders({keys: [Enums.reminderKeys.CATHARTIC]}).then(reminders => {
-                _push(reminders)
+                _sendToFcm(reminders)
             }).catch(err => {
                 console.log(err);
             })
@@ -77,7 +79,7 @@ const scheduler = {
                     Enums.reminderKeys.SPECIMEN_COLLECTION
                 ],
             }).then(reminders => {
-                _push(reminders)
+                _sendToFcm(reminders)
             }).catch(err => {
                 console.log(err);
             })
@@ -89,6 +91,12 @@ const scheduler = {
         eightAmScheduler && eightAmScheduler.cancel();
     },
 }
-
+/* TODO: only for test, remove it
+_getNeedNotificationReminders({keys: [Enums.reminderKeys.CATHARTIC]}).then(reminders => {
+    _sendToFcm(reminders)
+}).catch(err => {
+    console.log(err);
+})
+*/
 module.exports = scheduler;
 

@@ -21,7 +21,11 @@ class DomainProfile {
     }
 
     async getProfile(userModal) {
-        return await ProfileModel.query().where('user_id_fk', userModal.id).first();
+        let profile = await ProfileModel.query().where('user_id_fk', userModal.id).first();
+        if(profile) {
+            profile.email = userModal.email;
+        }
+        return profile;
     }
 
 }

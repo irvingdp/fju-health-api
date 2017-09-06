@@ -51,7 +51,7 @@ class DomainReservation {
     }
 
     async getPaidReservation() {
-        return ReservationModel.query().where({status: "paymentPending"}).eager('[reminder]');
+        return ReservationModel.query().where({status: "paymentPending"}).eager('reminder.reservation.user.device');
     }
 }
 

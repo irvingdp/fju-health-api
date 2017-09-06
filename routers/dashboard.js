@@ -31,8 +31,6 @@ router.get('/', async (req, res, next) => {
         }
 
         let profile = await domainProfile.getProfile(currentUser);
-        profile.email = currentUser.email;
-
         let package = await domainPackage.listPackages();
 
         //TODO: mock the test data first for testing. report should order by date desc
