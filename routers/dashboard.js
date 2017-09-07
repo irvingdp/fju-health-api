@@ -60,6 +60,10 @@ router.get('/', async (req, res, next) => {
             profile: profile,
             package: package,
             report: report,
+            user: {
+                email: currentUser.email,
+                uid: currentUser.uid,
+            },
         });
     } catch (error) {
         next(error);

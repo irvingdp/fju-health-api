@@ -10,7 +10,7 @@ let domainProfile = new DomainProfile();
 router.post('/', async (req, res, next) => {
     try {
         let currentUser = await domainUser.getUserWithProfile({email: req.authentication.email});
-        if(currentUser.profile) {
+        if(!currentUser.profile) {
             await domainProfile.createProfile({
                 userModal: currentUser,
                 name: req.body.name,
@@ -36,7 +36,6 @@ router.put('/', async (req, res, next) => {
             name: req.body.name,
             contactAddress: req.body.contactAddress,
             phoneNumber: req.body.phoneNumber,
-            email: currentUser.profile.email,
         });
         res.status(200).json(updatedProfile);
     } catch (error) {
