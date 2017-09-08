@@ -1,6 +1,6 @@
 const redis = require('redis');
 const bluebird = require('bluebird');
-const Config = require('../gen/config');
+const Config = require('../config');
 const log4js = require('log4js');
 const logger = log4js.getLogger();
 
