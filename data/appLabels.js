@@ -23,9 +23,32 @@ const _appLabels = {
             title: "健檢當日提醒",
             description: "請於凌晨 3:00 服用清腸藥物。",
         },
-    },
-    "en-us": {
+        LEVEL1_MALE_HEALTH_CHECK: {
+            title: "精準健檢",
+            description: "",
+        },
+        LEVEL1_FEMALE_HEALTH_CHECK: {
+            title: "精準健檢",
+            description: "",
+        },
+        LEVEL2_MALE_HEALTH_CHECK: {
+            title: "防癌健檢",
+            description: "",
+        },
+        LEVEL2_FEMALE_HEALTH_CHECK: {
+            title: "防癌健檢",
+            description: "",
+        },
+        LEVEL3_MALE_HEALTH_CHECK: {
+            title: "菁英防癌健檢",
+            description: "",
+        },
+        LEVEL3_FEMALE_HEALTH_CHECK: {
+            title: "菁英防癌健檢",
+            description: "",
+        },
 
-    }
+    },
+    "en-us": {}
 }
 module.exports = _appLabels[currentLanguage];

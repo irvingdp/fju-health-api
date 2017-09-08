@@ -30,8 +30,7 @@ exports.up = function (knex, Promise) {
             t.increments('id').unsigned().primary();
             t.integer('group');
             t.integer('order');
-            t.string('title');
-            t.string('description');
+            t.string('key');
             t.string('price');
             t.string('displayPrice');
             t.enu('gender', ['male', 'female']);
@@ -44,8 +43,7 @@ exports.up = function (knex, Promise) {
             {
                 group: 1,
                 order: 1,
-                title: "菁英防癌健檢",
-                description: "",
+                key: "LEVEL3_MALE_HEALTH_CHECK",
                 displayPrice: "NT$100,000",
                 price: 100000,
                 gender: GENDER.MALE,
@@ -54,8 +52,7 @@ exports.up = function (knex, Promise) {
             {
                 group: 1,
                 order: 2,
-                title: "菁英防癌健檢",
-                description: "",
+                key: "LEVEL3_FEMALE_HEALTH_CHECK",
                 displayPrice: "NT$116,000",
                 price: 116000,
                 gender: GENDER.FEMALE,
@@ -64,8 +61,7 @@ exports.up = function (knex, Promise) {
             {
                 group: 2,
                 order: 1,
-                title: "防癌健檢",
-                description: "",
+                key: "LEVEL2_MALE_HEALTH_CHECK",
                 displayPrice: "NT$71,000",
                 price: 71000,
                 gender: GENDER.MALE,
@@ -74,8 +70,7 @@ exports.up = function (knex, Promise) {
             {
                 group: 2,
                 order: 2,
-                title: "防癌健檢",
-                description: "",
+                key: "LEVEL2_FEMALE_HEALTH_CHECK",
                 displayPrice: "NT$73,000",
                 price: 73000,
                 gender: GENDER.FEMALE,
@@ -84,8 +79,7 @@ exports.up = function (knex, Promise) {
             {
                 group: 3,
                 order: 1,
-                title: "精準健檢",
-                description: "",
+                key: "LEVEL1_MALE_HEALTH_CHECK",
                 displayPrice: "NT$24,000",
                 price: 24000,
                 gender: GENDER.MALE,
@@ -94,8 +88,7 @@ exports.up = function (knex, Promise) {
             {
                 group: 3,
                 order: 2,
-                title: "精準健檢",
-                description: "",
+                key: "LEVEL1_FEMALE_HEALTH_CHECK",
                 displayPrice: "NT$27,000",
                 price: 27000,
                 gender: GENDER.FEMALE,

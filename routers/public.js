@@ -2,11 +2,14 @@ const express = require('express');
 const DomainUser = require('../domain/user');
 const Auth = require('../utils/auth');
 const DomainDevice = require('../domain/device');
+const DomainPackage = require('../domain/package');
+
 const {UserAlreadyRegisteredError, UserLoginFailedError} = require('../error/error');
 
 let router = express.Router();
 let domainUser = new DomainUser();
 let domainDevice = new DomainDevice();
+let domainPackage = new DomainPackage();
 
 router.post('/register', async (req, res, next) => {
     try {
@@ -48,6 +51,14 @@ router.post('/fcmtoken', async (req, res, next) => {
             });
         }
         res.status(200).json({});
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.get('/package/details', async (req, res, next) => {
+    try {
+        res.json(domainPackage.getPackagesDetail())
     } catch (error) {
         next(error);
     }

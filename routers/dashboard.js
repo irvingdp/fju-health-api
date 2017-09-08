@@ -64,6 +64,9 @@ router.get('/', async (req, res, next) => {
                 email: currentUser.email,
                 uid: currentUser.uid,
             },
+            packageData: {
+
+            }
         });
     } catch (error) {
         next(error);

@@ -1,6 +1,6 @@
 const Model = require('objection').Model;
 const timestampUpdateWrapper = require('./wrappers/timestampUpdateWrapper');
-const appLabel = require('../../AppLabels')
+const appLabel = require('../../data/appLabels')
 
 class Reminder extends Model {
     static get tableName() {

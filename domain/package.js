@@ -1,4 +1,5 @@
 const PackageModel = require('./models/package');
+const PackageData = require('../data/packageData');
 
 class DomainPackage {
     async getPackage({id}) {
@@ -6,6 +7,9 @@ class DomainPackage {
     }
     async listPackages() {
         return await PackageModel.query().orderBy('group').orderBy('order');
+    }
+    getPackagesDetail() {
+        return PackageData;
     }
 }
 
