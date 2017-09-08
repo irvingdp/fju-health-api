@@ -23,7 +23,19 @@ const Token = {
     },
     remove: (token) => {
         delete redisClient.delAsync(token);
-    }
+    },
+    keyForUser: (userId) => {
+        return `forget-password-${userId}`;
+    },
+    setTokenForUser: async ({userId, token}) => {
+        return redisClient.setAsync(Token.keyForUser(userId), token, 'EX', config.TOKEN_EXPIRES_IN_SEC);
+    },
+    getTokenForUser: async (userId) => {
+        return redisClient.getAsync(Token.keyForUser(userId));
+    },
+    removeTokenForUser: async (userId) => {
+        return redisClient.delAsync(Token.keyForUser(userId));
+    },
 }
 const _getLastAccessTime = (token) => {
     return redisClient.getAsync(token);

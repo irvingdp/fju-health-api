@@ -3,6 +3,18 @@ const ProfileModel = require('./models/profile');
 const Objection = require('objection');
 const PasswordUtils = require('../utils/passwordUtils');
 const Auth = require('../utils/auth');
+const JWT = require('jsonwebtoken');
+const Config = require('../config');
+const Token = require('../utils/token');
+
+const _decodeToken = (token) => {
+    try {
+        let decoded = JWT.verify(token, Config.TOKEN_SECRET);
+        return decoded.data;
+    } catch (err) {
+        return null;
+    }
+}
 
 class DomainUser {
     async isUserAlreadyRegistered({email}) {
@@ -38,6 +50,41 @@ class DomainUser {
     async getUserWithProfile({email}) {
         return await UserModel.query().where({email}).first().eager("profile");
     }
+
+    async getUserIdForToken(token) {
+        let decoded = _decodeToken(token);
+        let userId = decoded.userId;
+        let savedToken = await Token.getTokenForUser(userId); //- if a token is expired, then this will return null
+
+        //- need to double check if this token is the LATEST ONE SET FOR THIS USER
+        if (savedToken === token) {
+            return userId;
+        } else {
+            return null;
+        }
+    }
+
+    async removeTokenForUserId(userId) {
+        return Token.removeTokenForUser(userId);
+    }
+
+    async createTokenForUser(userId) {
+        let token = JWT.sign(
+            {data: {userId: userId}},
+            Config.TOKEN_SECRET,
+        );
+        await Token.setTokenForUser({userId, token});
+        return token;
+    }
+
+    async setNewPasswordForUserId({userId, password}) {
+        return UserModel.query()
+            .patch({password: password})
+            .where({id: userId})
+            .first();
+    }
 }
+
+
 
 module.exports = DomainUser;
