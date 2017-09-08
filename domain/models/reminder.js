@@ -1,6 +1,7 @@
 const Model = require('objection').Model;
 const timestampUpdateWrapper = require('./wrappers/timestampUpdateWrapper');
-const appLabel = require('../../data/appLabels')
+const AppLabels = require('../../data/appLabels')
+const Locale = require('../../locale')
 
 class Reminder extends Model {
     static get tableName() {
@@ -39,11 +40,11 @@ class Reminder extends Model {
     }
 
     get title() {
-        return appLabel[this.key] ? appLabel[this.key].title : "";
+        return AppLabels[Locale.getLocale()][this.key] ? AppLabels[Locale.getLocale()][this.key].title : "";
     }
 
     get description() {
-        return appLabel[this.key] ? appLabel[this.key].description : "";
+        return AppLabels[Locale.getLocale()][this.key] ? AppLabels[Locale.getLocale()][this.key].description : "";
     }
 }
 

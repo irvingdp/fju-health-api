@@ -1,5 +1,6 @@
 const PackageModel = require('./models/package');
-const PackageData = require('../data/packageData');
+const PackageData = require('../data/packageDetailData');
+const Locale = require('../locale');
 
 class DomainPackage {
     async getPackage({id}) {
@@ -9,7 +10,7 @@ class DomainPackage {
         return await PackageModel.query().orderBy('group').orderBy('order');
     }
     getPackagesDetail() {
-        return PackageData;
+        return PackageData[Locale.getLocale()];
     }
 }
 

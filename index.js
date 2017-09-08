@@ -15,12 +15,15 @@ let knex = Knex(knexConfig.development);
 Model.knex(knex);
 
 const scheduler = require('./scheduler');
+const Locale = require('./locale');
 
 // allow CORS
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+
+    Locale.setLocale(req.headers.locale);
 
     // intercept OPTIONS method to avoid preflight requiring authentication
     if ('OPTIONS' == req.method)
