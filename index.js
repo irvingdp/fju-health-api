@@ -2,10 +2,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const config = require("./config");
+const log4js = require('log4js');
+const addRequestId = require('express-request-id')();
 const Auth = require("./utils/auth");
 const app = express();
 const swaggerJSDoc = require('swagger-jsdoc');
 const authentication = require('express-authentication');
+const {maskFieldReplacer} = require('./utils/jsonStringifyReplacer');
 
 // initialize Knex
 const Model = require('objection').Model;
@@ -16,6 +19,44 @@ Model.knex(knex);
 
 const scheduler = require('./scheduler');
 const Locale = require('./locale');
+
+app.use(bodyParser({limit: '25mb'}));
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+
+{
+    /* Block for logging setup */
+    log4js.configure({
+        appenders: {
+            console: {
+                type: 'console',
+            }
+        },
+        categories: {default: {appenders: ['console'], level: 'debug'}}
+    });
+}
+const logger = log4js.getLogger();
+{
+    /* Block for further logging setup */
+    app.use(addRequestId); // Create uuid for a request, can be retrieved by using req.id
+    app.use(log4js.connectLogger(logger, {
+        level: log4js.levels.DEBUG, format: (req, res, format) => {
+
+            return format(`[${req.id}]:remote-addr - :method :url :status`);
+        }
+    }));
+    app.use(function (req, res, next) {
+        //- Log request body, but don't log password (using maskFieldReplacer)
+        logger.debug(`[${req.id}] - ${JSON.stringify(req.body, maskFieldReplacer.bind(this, ["password"]))}`);
+        next();
+    });
+    if (knexConfig.debug) {
+        //- Use logger instead of knex default console.log
+        knex.on('query', function (queryData) {
+            logger.debug(queryData);
+        });
+    }
+}
 
 // allow CORS
 app.use(function (req, res, next) {
@@ -31,8 +72,6 @@ app.use(function (req, res, next) {
     else
         next();
 });
-
-app.use(bodyParser.json()); //for parsing application/json
 
 app.use('/', require("./routers/public")); //none auth path
 
@@ -60,6 +99,7 @@ app.use('/reservation', authentication.required(), require("./routers/reservatio
 app.use('/package', authentication.required(), require("./routers/package"));
 
 app.use('/admin/public', require("./routers/admin"));
+
 app.use('/admin', authentication.required(), require("./routers/reservation")); // TODO: Jeff, need to authenticate 'admin user' vs 'normal user'
 
 app.use('/dashboard', authentication.required(), require("./routers/dashboard"));
@@ -88,6 +128,8 @@ app.use(function (err, req, res, next) {  // do not remove next as the method si
             stack: err.stack,
         }
     }
+    logger.error(`[${req.id}] (return status: ${status}) ${JSON.stringify(error)}`);
+    logger.error(error.stack);
     res.status(status).json(error);
 });
 
