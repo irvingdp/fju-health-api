@@ -18,6 +18,10 @@ const variables = {
         apiKey: "key-7550b9097f7d7fb47547334f04ad363e",
         domain: "iask.today",
     },
+    redis: {
+        host: "127.0.0.1",
+        port: 6379,
+    },
 };
 
 module.exports = variables;

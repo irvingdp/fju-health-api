@@ -1,9 +1,7 @@
 const config = require('../config');
 const moment = require('moment');
+const redisClient = require('../utils/redisClient');
 
-var TOKENS = {};
-
-//TODO: use Redis instead of in memory storage , for distribution api structure.
 const Token = {
     isExpired: (token) => {
         if (_isExisting(token)) {
@@ -18,20 +16,20 @@ const Token = {
         }
     },
     add: (token) => {
-        TOKENS[token] = moment().utc();
+        return redisClient.setAsync(token, moment().utc());
     },
     update: (token) => {
-        TOKENS[token] = moment().utc();
+        return redisClient.setAsync(token, moment().utc());
     },
     remove: (token) => {
-        delete TOKENS[token];
+        delete redisClient.delAsync(token);
     }
 }
 const _getLastAccessTime = (token) => {
-    return TOKENS[token];
+    return redisClient.getAsync(token);
 }
 const _isExisting = (token) => {
-    return TOKENS[token];
+    return redisClient.existsAsync(token);
 }
 
 module.exports = Token;

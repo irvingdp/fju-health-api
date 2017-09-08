@@ -1,0 +1,7 @@
+<%= constant.warning %>
+
+FROM redis:3.2.10
+
+LABEL name=fju-io-redis
+LABEL group=fju-health
+LABEL version=0.0.1
