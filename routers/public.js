@@ -51,7 +51,7 @@ router.post('/login', async (req, res, next) => {
 router.post('/fcmtoken', async (req, res, next) => {
     try {
         let device = await domainDevice.getDeviceByToken(req.body.fcm_token);
-        if(!device) {
+        if (!device) {
             await domainDevice.createDevice({
                 token: req.body.fcm_token,
             });
@@ -87,7 +87,7 @@ router.post('/forgetPassword/generate', async (req, res, next) => {
             logger.debug(`[${req.id}] Set forgot password token for user id ${user.id} : ${token}`);
 
             //- Send a link for user to reset their password
-            let link = new URL(`/user/forgetPassword/reset/${token}`, Config.DOMAIN_NAME);
+            let link = new URL(`/forgetPassword/reset/${token}`, Config.DOMAIN_NAME);
 
             logger.debug(`[${req.id}] Send reset password link to email: ${email}`);
             let result = await mailUtil.sendMail({
@@ -114,15 +114,19 @@ router.post('/forgetPassword/generate', async (req, res, next) => {
  * Page to enter new password
  */
 router.get('/forgetPassword/reset/:token', async (req, res) => {
-    let {token} = req.params;
+    try {
+        let {token} = req.params;
 
-    let userId = await domainUser.getUserIdForToken(token);
-    if (userId) {
-        logger.debug(`[${req.id}] Let user with id (${userId})set a password`);
+        let userId = await domainUser.getUserIdForToken(token);
+        if (userId) {
+            logger.debug(`[${req.id}] Let user with id (${userId})set a password`);
 
-        res.render('resetpassword.html');
-    } else {
-        res.sendStatus(403);
+            res.render('resetpassword.html');
+        } else {
+            res.sendStatus(403);
+        }
+    } catch (error) {
+        next(error);
     }
 });
 
@@ -130,20 +134,26 @@ router.get('/forgetPassword/reset/:token', async (req, res) => {
  * Set a new password for user
  */
 router.post('/forgetPassword/setNewPassword/', async (req, res) => {
-    let {token, password} = req.body;
+    try {
+        let {token, password} = req.body;
 
-    let userId = await domainUser.getUserIdForToken(token);
-    if (userId && password) {
-        logger.debug(`[${req.id}] Let user with id (${userId}) set a new password`);
-        const hashedPassword = PasswordUtils.hashPassword(password);
-        await domainUser.setNewPasswordForUserId({userId, password: hashedPassword});
+        let userId = await domainUser.getUserIdForToken(token);
+        if (userId && password) {
 
-        //- Remove token so the same token won't be used again.
-        await domainUser.removeTokenForUserId(userId);
+            logger.debug(`[${req.id}] Let user with id (${userId}) set a new password`);
+            const hashedPassword = PasswordUtils.hashPassword(password);
+            await domainUser.setNewPasswordForUserId({userId, passwordHash: hashedPassword});
 
-        res.send(200);
-    } else {
-        res.sendStatus(403);
+            //- Remove token so the same token won't be used again.
+            await domainUser.removeTokenForUserId(userId);
+
+            res.send(200);
+
+        } else {
+            res.sendStatus(403);
+        }
+    } catch (error) {
+        next(error);
     }
 });
 module.exports = router;

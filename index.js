@@ -9,6 +9,7 @@ const app = express();
 const swaggerJSDoc = require('swagger-jsdoc');
 const authentication = require('express-authentication');
 const {maskFieldReplacer} = require('./utils/jsonStringifyReplacer');
+const path = require('path');
 
 // initialize Knex
 const Model = require('objection').Model;
@@ -133,6 +134,12 @@ app.use(function (err, req, res, next) {  // do not remove next as the method si
     res.status(status).json(error);
 });
 
+// allow loading of html
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.engine('html', require('ejs').renderFile);
+
+
 /**
  * @swagger
  * tags:
@@ -175,7 +182,7 @@ app.get('/api', function (req, res) {
 });
 //end: Initialize swagger
 
-var port = process.argv[2] || 3002;
+var port = process.argv[2] || 3001;
 
 app.listen(port, function () {
     console.log('FJU Health API listening on port ' + port);

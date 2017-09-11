@@ -77,9 +77,9 @@ class DomainUser {
         return token;
     }
 
-    async setNewPasswordForUserId({userId, password}) {
+    async setNewPasswordForUserId({userId, passwordHash}) {
         return UserModel.query()
-            .patch({password: password})
+            .patch({passwordHash: passwordHash})
             .where({id: userId})
             .first();
     }
